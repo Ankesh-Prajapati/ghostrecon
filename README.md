@@ -2,11 +2,11 @@
 
 # GHOSTRECON
 
-### Advanced OSINT Dork Engine
+## Advanced OSINT Dork Engine
 
-![Version](https://img.shields.io/badge/release-v2.0-8B5CF6?style=for-the-badge&logo=github)
-![License](https://img.shields.io/badge/license-MIT-22D3EE?style=for-the-badge)
-![Status](https://img.shields.io/badge/status-stable-10B981?style=for-the-badge)
+![Version](https://img.shields.io/badge/RELEASE-v2.0-8B5CF6?style=for-the-badge)
+![License](https://img.shields.io/badge/LICENSE-MIT-22D3EE?style=for-the-badge)
+![Status](https://img.shields.io/badge/STATUS-STABLE-10B981?style=for-the-badge)
 
 **Zero-dependency web-based tool for cybersecurity reconnaissance and OSINT gathering.**
 
@@ -53,7 +53,7 @@ Step	Action
 4	Browse and filter dork categories
 5	Execute individual queries or use bulk queue
 Constructor Examples
-text
+bash
 site:example.com inurl:admin filetype:php intitle:"login"
 filetype:sql intext:"CREATE TABLE" intext:password
 site:github.com "api_key" "example.com"
