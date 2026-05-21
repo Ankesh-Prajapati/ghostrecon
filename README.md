@@ -1,51 +1,66 @@
-GHOSTRECON
-Advanced OSINT Dork Engine
 <div align="center">
-https://img.shields.io/badge/version-2.0-blue?style=flat-square
-https://img.shields.io/badge/license-MIT-green?style=flat-square
-https://img.shields.io/badge/status-stable-brightgreen?style=flat-square
 
-Self-contained web-based tool for building and executing Google dorks for OSINT research and security testing.
+# GHOSTRECON
+
+### Advanced OSINT Dork Engine
+
+![Version](https://img.shields.io/badge/release-v2.0-8B5CF6?style=for-the-badge&logo=github)
+![License](https://img.shields.io/badge/license-MIT-22D3EE?style=for-the-badge)
+![Status](https://img.shields.io/badge/status-stable-10B981?style=for-the-badge)
+
+**Zero-dependency web-based tool for cybersecurity reconnaissance and OSINT gathering.**
 
 </div>
-✨ Features
-Feature	Description
-200+ Pre-built Dorks	Security-focused and file-hunting categories
-Dual Mode	CYBER_INTEL + FILE_HUNTER
-5 Search Engines	Google, Bing, DuckDuckGo, Brave, Yandex
-Target Profiling	Auto-inject domains with site: operator
-Bulk Operations	Queue and launch multiple dorks
-Custom Constructor	Build advanced queries with operator chips
-Export	Save dorks as TXT, JSON, or CSV
-Zero Dependencies	Self-contained, no tracking, local storage only
-🚀 Quick Start
-bash
+
+---
+
+## Overview
+
+GhostRecon provides security professionals with a comprehensive interface for constructing and executing search engine dorks. Features an extensive database of curated queries, multi-engine support, and advanced query construction — all without external dependencies or tracking.
+
+**Use Cases:** Authorized penetration testing · Bug bounty programs · CTF competitions · Security research
+
+---
+
+## Capabilities
+
+| Module | Description |
+|:-------|:------------|
+| **Cyber Intelligence** | Attack surface mapping, credential discovery, configuration leaks, API reconnaissance |
+| **File Hunter** | Document discovery, source code analysis, backup archives, public records |
+| **Custom Constructor** | Operator-assisted query building |
+| **Bulk Execution** | Queue management for sequential dork deployment |
+
+**Search Engines:** Google · Bing · DuckDuckGo · Brave · Yandex
+
+---
+
+## Installation
+
+```bash
 git clone https://github.com/yourusername/ghostrecon.git
 cd ghostrecon
 python -m http.server 8080
-# or open index.html directly
-📖 Basic Usage
-Set target domain (optional) → Save for persistence
+Navigate to http://localhost:8080
 
-Choose mode → CYBER_INTEL or FILE_HUNTER
+No build steps or package installation required.
 
-Select search engine → Default: Google
-
-Browse categories → Click any card to view dorks
-
-Execute → Run individual dorks or use bulk queue
-
-Custom Constructor Example
+Operation
+Step	Action
+1	Configure target domain (auto-injects site: operator)
+2	Select mode: CYBER_INTEL or FILE_HUNTER
+3	Choose search engine
+4	Browse and filter dork categories
+5	Execute individual queries or use bulk queue
+Constructor Examples
 text
 site:example.com inurl:admin filetype:php intitle:"login"
-filetype:sql intext:password OR intext:username
-🎨 Themes
-Toggle between Dim (default), Void, and White using the theme pill in header.
-
-⚠️ Disclaimer
-For authorized security research, CTF, bug bounty, and ethical OSINT only. Users are solely responsible for compliance with laws and terms of service.
+filetype:sql intext:"CREATE TABLE" intext:password
+site:github.com "api_key" "example.com"
+Legal
+This tool is for authorized security assessments, bug bounty programs, CTF competitions, and ethical OSINT research. Users are exclusively responsible for compliance with applicable laws and search engine terms of service. Unauthorized use is prohibited.
 
 <div align="center">
-MIT License • Built for ethical security research
+MIT License · Built for security professionals
 
-</div>
+</div> ```
