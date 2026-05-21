@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GhostRecon — Advanced OSINT Dork Engine</title>
+
+  <!-- All assets are local — no tracking, no CDN, no external calls -->
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="icons.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+
+<div class="wrap">
+
+  <!-- ═══════ HEADER ═══════ -->
+  <header>
+    <div class="header-top">
+      <div class="logo">
+        <div class="logo-icon"><i class="fas fa-ghost"></i></div>
+        <div class="logo-text">
+          <div class="logo-name">GHOSTRECON</div>
+          <div class="logo-sub">ADVANCED OSINT DORK ENGINE </div>
+        </div>
+      </div>
+      <div class="status-pills">
+        <div class="pill"><span class="dot green"></span> SYSTEM ONLINE</div>
+        <div class="pill"><span class="dot ghost"></span> <span id="status-mode">CYBER_INTEL</span></div>
+        <div class="pill"><span class="dot acid"></span> QUERIES: <span id="qcount">0</span></div>
+        <div class="pill" id="theme-pill" style="cursor:pointer" title="Toggle theme" onclick="toggleTheme()">THEME: <span id="theme-name">dim</span></div>
+      </div>
+    </div>
+    <nav>
+      <button class="nav-btn active" data-page="tool"><i class="fas fa-crosshairs"></i> DORK ENGINE</button>
+      <button class="nav-btn" data-page="custom"><i class="fas fa-code"></i> CONSTRUCTOR</button>
+      <button class="nav-btn" data-page="history"><i class="fas fa-history"></i> HISTORY</button>
+      <button class="nav-btn" data-page="ref"><i class="fas fa-book-open"></i> OPERATORS</button>
+    </nav>
+  </header>
+
+  <!-- ═══════ STATS ═══════ -->
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-val" id="s-total">0</div>
+      <div class="stat-key">Total Dorks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="s-sec">0</div>
+      <div class="stat-key">Cyber Intel</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" id="s-file">0</div>
+      <div class="stat-key">File Hunter</div>
+    </div>
+    <div class="stat">
+      <div class="stat-val" style="color:var(--acid)">5</div>
+      <div class="stat-key">Search Engines</div>
+    </div>
+  </div>
+
+  <!-- ═══════ TOOL PAGE ═══════ -->
+  <div id="page-tool">
+    <div class="main-grid">
+
+      <!-- LEFT: CONFIG -->
+      <div>
+        <div class="panel target-panel" id="target-profile">
+          <div class="panel-head"><i class="fas fa-crosshairs"></i> TARGET PROFILE</div>
+          <div class="panel-body">
+            <div class="field" id="domain-field">
+              <label><i class="fas fa-server"></i> TARGET DOMAIN</label>
+              <div class="input-wrap">
+                <span class="input-prefix">site:</span>
+                <input type="text" id="inp-domain" class="has-prefix" placeholder="example.com" autocomplete="off">
+                <button class="clear-btn" onclick="clearField('inp-domain')" title="Clear"><i class="fas fa-times"></i></button>
+              </div>
+              <div class="target-meta">
+                <span id="saved-target">No saved target</span>
+                <span id="target-normalized">Input is normalized before every query.</span>
+              </div>
+              <div class="target-actions">
+                <button class="btn btn-secondary" onclick="saveTargetFromInput(true)"><i class="fas fa-check"></i> SAVE TARGET</button>
+                <button class="btn btn-secondary" onclick="clearSavedTarget()"><i class="fas fa-trash"></i> CLEAR</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head"><i class="fas fa-sliders-h"></i> CONFIGURATION</div>
+          <div class="panel-body">
+
+            <!-- Mode selector -->
+            <div class="mode-switch">
+              <div class="mode-card active" id="mc-sec" onclick="switchMode('sec')">
+                <i class="fas fa-shield-virus"></i>
+                <span>CYBER_INTEL</span>
+              </div>
+              <div class="mode-card" id="mc-media" onclick="switchMode('media')">
+                <i class="fas fa-folder-open"></i>
+                <span>FILE_HUNTER</span>
+              </div>
+            </div>
+
+            <!-- Keyword -->
+            <div class="field">
+              <label><i class="fas fa-search"></i> KEYWORD / QUERY</label>
+              <div class="input-wrap">
+                <input type="text" id="inp-kw" placeholder="Optional search term…" autocomplete="off">
+                <button class="clear-btn" onclick="clearField('inp-kw')" title="Clear"><i class="fas fa-times"></i></button>
+              </div>
+            </div>
+
+            <!-- Engine selector -->
+            <div class="engine-label"><i class="fas fa-search" style="color:var(--ghost);margin-right:5px;"></i> SEARCH ENGINE</div>
+            <div class="engine-row" id="engines">
+              <button class="engine-btn active" data-engine="google">Google</button>
+              <button class="engine-btn" data-engine="bing">Bing</button>
+              <button class="engine-btn" data-engine="duckduckgo">DDG</button>
+              <button class="engine-btn" data-engine="brave">Brave</button>
+              <button class="engine-btn" data-engine="yandex">Yandex</button>
+            </div>
+
+            <!-- Live query preview -->
+            <div class="query-preview" id="qpreview">
+              <div class="qp-label">
+                GENERATED QUERY
+                <button class="qp-copy" onclick="copyQuery()" title="Copy query"><i class="fas fa-copy"></i> COPY</button>
+              </div>
+              <code id="query-text"></code>
+            </div>
+
+            <!-- Action buttons -->
+            <div class="btn-row">
+              <button class="btn btn-primary" onclick="executeSearch()"><i class="fas fa-bolt"></i> EXECUTE</button>
+              <button class="btn btn-secondary" onclick="resetAll()"><i class="fas fa-redo"></i> RESET</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- BULK LAUNCH -->
+        <div class="panel">
+          <div class="panel-head"><i class="fas fa-layer-group"></i> BULK LAUNCH</div>
+          <div class="panel-body">
+            <p style="font-size:10px;color:var(--text-dim);margin-bottom:10px;">
+              Queue dorks from any category using <i class="fas fa-layer-group"></i>, then launch all at once.
+            </p>
+            <div class="bulk-list" id="bulk-list">
+              <span style="color:var(--text-muted)">No dorks queued. Open a category and click the stack icon.</span>
+            </div>
+            <div class="sep"></div>
+            <div class="btn-row">
+              <button class="btn btn-primary" onclick="executeBulk()" style="font-size:8px;"><i class="fas fa-play"></i> LAUNCH ALL</button>
+              <button class="btn btn-secondary" onclick="clearBulk()" style="font-size:8px;"><i class="fas fa-trash"></i> CLEAR</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: CATEGORIES -->
+      <div class="cat-section">
+        <div class="section-head">
+          <div class="section-title"><i class="fas fa-database"></i> <span id="cat-title">CYBER INTEL CATEGORIES</span></div>
+          <input type="text" class="cat-search" id="cat-filter" placeholder="Filter categories…" oninput="filterCats()">
+        </div>
+        <div class="cat-grid" id="cat-grid"></div>
+      </div>
+
+    </div>
+  </div><!-- /page-tool -->
+
+  <!-- ═══════ CONSTRUCTOR PAGE ═══════ -->
+  <div id="page-custom" class="hidden">
+    <div class="panel">
+      <div class="panel-head"><i class="fas fa-terminal"></i> ADVANCED CONSTRUCTOR</div>
+      <div class="panel-body">
+        <p style="font-size:10px;color:var(--text-dim);margin-bottom:14px;">
+          Build custom queries by combining Google operators. Click any chip to insert it at cursor position.
+        </p>
+        <div class="op-chips">
+          <button class="op-chip" onclick="insertOp('site:')">site:</button>
+          <button class="op-chip" onclick="insertOp('filetype:')">filetype:</button>
+          <button class="op-chip" onclick="insertOp('inurl:')">inurl:</button>
+          <button class="op-chip" onclick="insertOp('intitle:')">intitle:</button>
+          <button class="op-chip" onclick="insertOp('intext:')">intext:</button>
+          <button class="op-chip" onclick="insertOp('ext:')">ext:</button>
+          <button class="op-chip" onclick="insertOp('cache:')">cache:</button>
+          <button class="op-chip" onclick="insertOp('related:')">related:</button>
+          <button class="op-chip" onclick="insertOp('link:')">link:</button>
+          <button class="op-chip" onclick="insertOp('-')">– exclude</button>
+          <button class="op-chip" onclick="insertOp('OR ')">OR</button>
+          <button class="op-chip" onclick="insertOp('AND ')">AND</button>
+          <button class="op-chip" onclick="insertOp('&quot;&quot;')">" "</button>
+          <button class="op-chip" onclick="insertOp('()')">( )</button>
+        </div>
+        <div class="field">
+          <textarea id="custom-inp" placeholder='Example: site:example.com inurl:admin filetype:php intitle:"login"' rows="4"></textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn btn-primary" onclick="runCustom()"><i class="fas fa-play"></i> EXECUTE</button>
+          <button class="btn btn-secondary" onclick="clearCustom()"><i class="fas fa-eraser"></i> CLEAR</button>
+        </div>
+        <p style="font-size:9px;letter-spacing:2px;color:var(--text-dim);margin:14px 0 8px;">QUICK EXAMPLES</p>
+        <div class="example-chips">
+          <button class="ex-chip" onclick="setCustom('site:*.edu filetype:pdf intitle:&quot;confidential&quot;')">📄 Confidential .edu PDFs</button>
+          <button class="ex-chip" onclick="setCustom('inurl:admin intitle:login filetype:php')">🔐 PHP Admin Panels</button>
+          <button class="ex-chip" onclick="setCustom('filetype:sql intext:password OR intext:username')">🗄️ SQL Credentials</button>
+          <button class="ex-chip" onclick="setCustom('site:github.com &quot;api_key&quot; OR &quot;API_SECRET&quot;')">🔑 GitHub API Keys</button>
+          <button class="ex-chip" onclick="setCustom('inurl:swagger OR inurl:api-docs intitle:swagger')">📡 Swagger Endpoints</button>
+          <button class="ex-chip" onclick="setCustom('filename:.env intext:DB_PASSWORD')">🌿 .env Files</button>
+          <button class="ex-chip" onclick="setCustom('intitle:&quot;index of&quot; intext:&quot;backup&quot; filetype:zip OR filetype:tar')">📦 Backup Archives</button>
+          <button class="ex-chip" onclick="setCustom('intitle:&quot;Werkzeug Debugger&quot; OR intitle:&quot;Django Error&quot;')">🐛 Debug Consoles</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- /page-custom -->
+
+  <!-- ═══════ HISTORY PAGE ═══════ -->
+  <div id="page-history" class="hidden">
+    <div class="section-head">
+      <div class="section-title"><i class="fas fa-history"></i> SEARCH HISTORY</div>
+      <button class="btn btn-secondary" style="flex:0;padding:7px 14px;font-size:9px;" onclick="clearHist()">
+        <i class="fas fa-trash"></i> CLEAR ALL
+      </button>
+    </div>
+    <div class="hist-grid" id="hist-grid">
+      <p class="no-results">No searches recorded yet.</p>
+    </div>
+  </div><!-- /page-history -->
+
+  <!-- ═══════ OPERATORS REF PAGE ═══════ -->
+  <div id="page-ref" class="hidden">
+    <div class="section-head">
+      <div class="section-title"><i class="fas fa-book-open"></i> OPERATORS REFERENCE</div>
+    </div>
+    <div class="ops-grid">
+      <div class="op-ref"><code>site:</code><p>Restrict results to a specific domain or TLD</p></div>
+      <div class="op-ref"><code>filetype:</code><p>Find specific file extensions (pdf, xls, sql…)</p></div>
+      <div class="op-ref"><code>inurl:</code><p>Search for a string within the URL</p></div>
+      <div class="op-ref"><code>intitle:</code><p>Match a string in the page HTML title</p></div>
+      <div class="op-ref"><code>intext:</code><p>Match a string in the body text of a page</p></div>
+      <div class="op-ref"><code>ext:</code><p>Alias for filetype:</p></div>
+      <div class="op-ref"><code>cache:</code><p>View Google's cached snapshot of a URL</p></div>
+      <div class="op-ref"><code>related:</code><p>Find sites similar to a given URL</p></div>
+      <div class="op-ref"><code>link:</code><p>Find pages that link to a given URL</p></div>
+      <div class="op-ref"><code>-term</code><p>Exclude pages containing the term</p></div>
+      <div class="op-ref"><code>OR / AND</code><p>Boolean operators to combine terms</p></div>
+      <div class="op-ref"><code>"phrase"</code><p>Exact phrase match (wrapped in quotes)</p></div>
+      <div class="op-ref"><code>*</code><p>Wildcard — matches any word or phrase</p></div>
+      <div class="op-ref"><code>before: / after:</code><p>Filter by date range (YYYY-MM-DD)</p></div>
+      <div class="op-ref"><code>(group)</code><p>Group boolean logic with parentheses</p></div>
+      <div class="op-ref"><code>define:</code><p>Show the definition of a word</p></div>
+    </div>
+  </div><!-- /page-ref -->
+
+</div><!-- /wrap -->
+
+<!-- FOOTER -->
+<div class="wrap" style="padding-top:0;">
+  <footer>
+    <div class="footer-brand"><span>GHOSTRECON</span> · OSINT DORK ENGINE · 2026</div>
+    <div class="footer-disc">
+      <i class="fas fa-exclamation-triangle" style="color:var(--amber)"></i>
+      For authorized security research, CTF, bug bounty, and ethical OSINT only.
+      Misuse is the sole responsibility of the operator.
+    </div>
+  </footer>
+</div>
+
+<!-- DORK MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title"><i class="fas fa-list"></i> SELECT DORK</div>
+      <button class="modal-close" onclick="closeModalDirect()"><i class="fas fa-times"></i></button>
+    </div>
+    <div class="modal-filter">
+      <input type="text" placeholder="Filter dorks in this category…" id="modal-filter" oninput="filterModal()">
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="export-bar">
+      <button class="export-btn" onclick="exportCurrent('txt')"><i class="fas fa-file-alt"></i> Export TXT</button>
+      <button class="export-btn" onclick="exportCurrent('json')"><i class="fas fa-file-code"></i> Export JSON</button>
+      <button class="export-btn" onclick="exportCurrent('csv')"><i class="fas fa-file-csv"></i> Export CSV</button>
+      <button class="export-btn" onclick="addAllToBulk()" style="margin-left:auto;"><i class="fas fa-layer-group"></i> Add All to Bulk</button>
+    </div>
+  </div>
+</div>
+
+<!-- CONFIRM PREVIEW MODAL -->
+<div class="modal" id="confirm-modal">
+  <div class="modal-box">
+    <div class="modal-head">
+      <div class="modal-title"><i class="fas fa-exclamation-circle"></i> QUERY PREVIEW</div>
+      <button class="modal-close" onclick="closeConfirm()"><i class="fas fa-times"></i></button>
+    </div>
+    <div style="padding:14px 18px;">
+      <p style="font-size:13px;color:var(--text-dim);margin-bottom:8px;">Review the fully assembled query before launching the search engine.</p>
+      <div class="confirm-meta">
+        <span>Engine: <strong id="confirm-engine">Google</strong></span>
+        <span id="confirm-count">1 query</span>
+      </div>
+      <div style="background:var(--abyss);border:1px solid var(--border);padding:12px;border-radius:8px;margin-bottom:12px;word-break:break-word;">
+        <code id="confirm-query" style="color:var(--acid);font-family:var(--font-mono);font-size:13px;white-space:pre-wrap;"></code>
+      </div>
+      <div id="confirm-why" style="font-size:13px;color:var(--text-dim);margin-bottom:12px;">Why it matters: <span id="confirm-why-text">-</span></div>
+      <div style="display:flex;gap:10px;">
+        <button class="btn btn-primary" id="confirm-launch" onclick="confirmRun()"><i class="fas fa-play"></i> LAUNCH</button>
+        <button class="btn btn-secondary" onclick="closeConfirm()">CANCEL</button>
+        <button class="btn btn-secondary" onclick="copyConfirmQuery()" style="margin-left:auto;">COPY QUERY</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST CONTAINER -->
+<div id="toast-wrap"></div>
+
+<!-- SCROLL TO TOP -->
+<button id="scrolltop" onclick="scrollToTop()" title="Back to top"><i class="fas fa-arrow-up"></i></button>
+
+<script src="script.js"></script>
+</body>
+</html>
