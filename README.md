@@ -1,16 +1,19 @@
-<div align="center">
-
 # GHOSTRECON
 
 ## Advanced OSINT Dork Engine
 
-![Version](https://img.shields.io/badge/RELEASE-v2.0-8B5CF6?style=for-the-badge)
-![License](https://img.shields.io/badge/LICENSE-MIT-22D3EE?style=for-the-badge)
-![Status](https://img.shields.io/badge/STATUS-STABLE-10B981?style=for-the-badge)
+<div align="center">
 
-**Zero-dependency web-based tool for cybersecurity reconnaissance and OSINT gathering.**
+| | | |
+|:---:|:---:|:---:|
+| **RELEASE** | **LICENSE** | **STATUS** |
+| v2.0 | MIT | Stable |
 
 </div>
+
+---
+
+**Zero-dependency web tool for cybersecurity reconnaissance and OSINT gathering.**
 
 ---
 
@@ -24,12 +27,17 @@ GhostRecon provides security professionals with a comprehensive interface for co
 
 ## Capabilities
 
-| Module | Description |
-|:-------|:------------|
-| **Cyber Intelligence** | Attack surface mapping, credential discovery, configuration leaks, API reconnaissance |
-| **File Hunter** | Document discovery, source code analysis, backup archives, public records |
-| **Custom Constructor** | Operator-assisted query building |
-| **Bulk Execution** | Queue management for sequential dork deployment |
+### 🔍 Cyber Intelligence
+Attack surface mapping, credential discovery, configuration leaks, API reconnaissance
+
+### 📁 File Hunter
+Document discovery, source code analysis, backup archives, public records
+
+### 🛠 Custom Constructor
+Operator-assisted query building
+
+### 📦 Bulk Execution
+Queue management for sequential dork deployment
 
 **Search Engines:** Google · Bing · DuckDuckGo · Brave · Yandex
 
@@ -55,10 +63,12 @@ Step	Action
 Constructor Examples
 bash
 site:example.com inurl:admin filetype:php intitle:"login"
+bash
 filetype:sql intext:"CREATE TABLE" intext:password
+bash
 site:github.com "api_key" "example.com"
 Legal
-This tool is for authorized security assessments, bug bounty programs, CTF competitions, and ethical OSINT research. Users are exclusively responsible for compliance with applicable laws and search engine terms of service. Unauthorized use is prohibited.
+This tool is for authorized security assessments, bug bounty programs, CTF competitions, and ethical OSINT research. Users are responsible for their own compliance with applicable laws and regulations.
 
 <div align="center">
 MIT License · Built for security professionals
