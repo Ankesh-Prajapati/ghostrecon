@@ -3,9 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GhostRecon — Advanced OSINT Dork Engine</title>
 
-  <!-- All assets are local — no tracking, no CDN, no external calls -->
+  <!-- ══════════════════════════════════════════════
+       PRIMARY SEO — Title & Description
+  ══════════════════════════════════════════════ -->
+  <title>GhostRecon — Advanced OSINT Dork Engine | Google Dorking Tool for Security Researchers</title>
+  <meta name="description" content="GhostRecon is a free, browser-based OSINT Google Dorking engine for cybersecurity analysts, bug bounty hunters, and VAPT professionals. Generate advanced search dorks for credential leaks, exposed configs, CVE patterns, Shodan queries, GitHub secrets, and more — no backend required.">
+  <meta name="keywords" content="ghostrecon, ghost recon osint, google dorking tool, dork engine, osint tool, google dorks, bug bounty dorking, security dorks, advanced google search, information gathering, recon tool, cybersecurity osint, vapt tool, penetration testing recon, google hacking, shodan dorks, censys queries, github dorking, dork generator, exposed credentials finder, security research tool, web application recon, kali linux osint alternative, passive reconnaissance, attack surface discovery, ghdb dorks, google hacking database, open source intelligence, security scanner free, online osint tool">
+  <meta name="author" content="GhostRecon">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <meta name="theme-color" content="#8b5cf6">
+  <link rel="canonical" href="https://ghostrecon.app/">
+
+  <!-- ══════════════════════════════════════════════
+       OPEN GRAPH — Social / Link Previews
+  ══════════════════════════════════════════════ -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="GhostRecon">
+  <meta property="og:title" content="GhostRecon — Advanced OSINT Dork Engine">
+  <meta property="og:description" content="Free browser-based OSINT dorking engine. Generate advanced Google dorks for credential leaks, Shodan queries, GitHub secrets, CVE patterns, OAuth misconfigs and more. No login, no tracking, no backend.">
+  <meta property="og:url" content="https://ghostrecon.app/">
+  <meta property="og:image" content="https://ghostrecon.app/og-banner.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+
+  <!-- ══════════════════════════════════════════════
+       TWITTER CARD
+  ══════════════════════════════════════════════ -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="GhostRecon — Advanced OSINT Dork Engine">
+  <meta name="twitter:description" content="Free browser-based OSINT dorking engine for bug bounty hunters & security researchers. Shodan, GitHub, CVE, OAuth dorks — all in one place. No backend needed.">
+  <meta name="twitter:image" content="https://ghostrecon.app/og-banner.png">
+  <meta name="twitter:site" content="@ghostrecon_app">
+  <meta name="twitter:creator" content="@ghostrecon_app">
+
+  <!-- ══════════════════════════════════════════════
+       STRUCTURED DATA — SoftwareApplication (JSON-LD)
+  ══════════════════════════════════════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "GhostRecon",
+    "alternateName": ["GhostRecon OSINT", "Ghost Recon Dork Engine", "GhostRecon Dorking Tool"],
+    "description": "GhostRecon is a free, browser-based OSINT Google Dorking engine for cybersecurity analysts, bug bounty hunters, and VAPT professionals. It generates advanced search dorks for credential leaks, exposed configs, CVE-specific patterns, Shodan and Censys queries, GitHub secrets, OAuth misconfigs, and more.",
+    "url": "https://ghostrecon.app/",
+    "applicationCategory": "SecurityApplication",
+    "operatingSystem": "Any (Browser-based)",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Google Dorking",
+      "OSINT Reconnaissance",
+      "Shodan Query Builder",
+      "Censys Query Builder",
+      "GitHub Code Search Dorks",
+      "CVE Exploit Pattern Dorks",
+      "OAuth Misconfiguration Detection",
+      "Credential Leak Discovery",
+      "Bulk Dork Launch",
+      "Search History",
+      "Favorites / Bookmarks",
+      "Severity Scoring",
+      "Multi-Engine Support"
+    ],
+    "keywords": "osint, google dorking, bug bounty, security research, vapt, dork engine, shodan, censys, github dorking, recon"
+  }
+  </script>
+
+  <!-- ══════════════════════════════════════════════
+       STRUCTURED DATA — WebSite with SearchAction
+  ══════════════════════════════════════════════ -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "GhostRecon",
+    "url": "https://ghostrecon.app/",
+    "description": "Advanced OSINT Google Dorking Engine for security professionals",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": "https://ghostrecon.app/?q={search_term_string}",
+      "query-input": "required name=search_term_string"
+    }
+  }
+  </script>
+
+  <!-- ══════════════════════════════════════════════
+       GOOGLE ANALYTICS 4
+  ══════════════════════════════════════════════ -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ED9BYX2YY0"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-ED9BYX2YY0', {
+      page_title: 'GhostRecon — OSINT Dork Engine',
+      send_page_view: true
+    });
+  </script>
+
+  <!-- Assets -->
   <link rel="stylesheet" href="fonts.css">
   <link rel="stylesheet" href="icons.css">
   <link rel="stylesheet" href="style.css">
@@ -39,6 +141,7 @@
       <button class="nav-btn" data-page="custom"><i class="fas fa-code"></i> CONSTRUCTOR</button>
       <button class="nav-btn" data-page="history"><i class="fas fa-history"></i> HISTORY</button>
       <button class="nav-btn" data-page="ref"><i class="fas fa-book-open"></i> OPERATORS</button>
+      <button class="nav-btn" data-page="favs"><i class="fas fa-star"></i> FAVORITES <span class="fav-count-badge" id="fav-nav-count" style="display:none"></span></button>
     </nav>
   </header>
 
@@ -95,14 +198,18 @@
           <div class="panel-body">
 
             <!-- Mode selector -->
-            <div class="mode-switch">
+            <div class="mode-switch mode-switch-3">
               <div class="mode-card active" id="mc-sec" onclick="switchMode('sec')">
-                <i class="fas fa-shield-virus"></i>
+                <i class="fas fa-user-secret"></i>
                 <span>CYBER_INTEL</span>
               </div>
               <div class="mode-card" id="mc-media" onclick="switchMode('media')">
                 <i class="fas fa-folder-open"></i>
                 <span>FILE_HUNTER</span>
+              </div>
+              <div class="mode-card" id="mc-shodan" onclick="switchMode('shodan')">
+                <i class="fas fa-broadcast-tower"></i>
+                <span>SHODAN_INTEL</span>
               </div>
             </div>
 
@@ -123,6 +230,9 @@
               <button class="engine-btn" data-engine="duckduckgo">DDG</button>
               <button class="engine-btn" data-engine="brave">Brave</button>
               <button class="engine-btn" data-engine="yandex">Yandex</button>
+              <button class="engine-btn engine-specialist" data-engine="shodan" title="Use with SHODAN_INTEL dorks">Shodan</button>
+              <button class="engine-btn engine-specialist" data-engine="censys" title="Use with SHODAN_INTEL dorks">Censys</button>
+              <button class="engine-btn engine-specialist" data-engine="github" title="Use with GitHub Advanced dorks">GitHub</button>
             </div>
 
             <!-- Live query preview -->
@@ -158,15 +268,26 @@
               <button class="btn btn-primary" onclick="executeBulk()" style="font-size:8px;"><i class="fas fa-play"></i> LAUNCH ALL</button>
               <button class="btn btn-secondary" onclick="clearBulk()" style="font-size:8px;"><i class="fas fa-trash"></i> CLEAR</button>
             </div>
+            <div class="btn-row" style="margin-bottom:0;">
+              <button class="btn btn-secondary" onclick="copyBulkQueue()" style="font-size:8px;"><i class="fas fa-copy"></i> COPY ALL AS TEXT</button>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- RIGHT: CATEGORIES -->
-      <div class="cat-section">
+        <div class="cat-section">
         <div class="section-head">
           <div class="section-title"><i class="fas fa-database"></i> <span id="cat-title">CYBER INTEL CATEGORIES</span></div>
           <input type="text" class="cat-search" id="cat-filter" placeholder="Filter categories…" oninput="filterCats()">
+        </div>
+        <!-- GLOBAL DORK SEARCH -->
+        <div id="global-search-wrap">
+          <div class="input-wrap" style="position:relative;">
+            <span style="position:absolute;left:11px;z-index:1;color:var(--acid);font-size:12px;pointer-events:none;"><i class="fas fa-search"></i></span>
+            <input type="text" id="global-search" class="cat-search" style="width:100%;padding-left:32px;border-color:rgba(34,211,238,0.3);" placeholder="⚡ Search ALL dorks across every category…" oninput="globalSearch(this.value)">
+            <button class="clear-btn" style="position:absolute;right:8px;" onclick="clearGlobalSearch()" title="Clear search"><i class="fas fa-times"></i></button>
+          </div>
+          <div id="global-results" class="hidden"></div>
         </div>
         <div class="cat-grid" id="cat-grid"></div>
       </div>
@@ -233,6 +354,24 @@
     </div>
   </div><!-- /page-history -->
 
+  <!-- ═══════ FAVORITES PAGE ═══════ -->
+  <div id="page-favs" class="hidden">
+    <div class="section-head">
+      <div class="section-title"><i class="fas fa-star" style="color:var(--amber)"></i> SAVED FAVORITES</div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button class="btn btn-secondary" style="flex:0;padding:7px 14px;font-size:9px;" onclick="copyAllFavs()">
+          <i class="fas fa-copy"></i> COPY ALL
+        </button>
+        <button class="btn btn-secondary" style="flex:0;padding:7px 14px;font-size:9px;" onclick="clearFavs()">
+          <i class="fas fa-trash"></i> CLEAR ALL
+        </button>
+      </div>
+    </div>
+    <div id="fav-grid">
+      <p class="no-results">No favorites saved yet. Open any category and click <i class="fas fa-star"></i> on any dork to bookmark it.</p>
+    </div>
+  </div><!-- /page-favs -->
+
   <!-- ═══════ OPERATORS REF PAGE ═══════ -->
   <div id="page-ref" class="hidden">
     <div class="section-head">
@@ -281,6 +420,13 @@
     </div>
     <div class="modal-filter">
       <input type="text" placeholder="Filter dorks in this category…" id="modal-filter" oninput="filterModal()">
+      <div class="sev-filter-row">
+        <button class="sev-filter-btn active" data-sev="all" onclick="setSevFilter('all')">ALL</button>
+        <button class="sev-filter-btn sev-filter-critical" data-sev="critical" onclick="setSevFilter('critical')">CRITICAL</button>
+        <button class="sev-filter-btn sev-filter-high" data-sev="high" onclick="setSevFilter('high')">HIGH</button>
+        <button class="sev-filter-btn sev-filter-medium" data-sev="medium" onclick="setSevFilter('medium')">MEDIUM</button>
+        <button class="sev-filter-btn sev-filter-info" data-sev="info" onclick="setSevFilter('info')">INFO</button>
+      </div>
     </div>
     <div class="modal-body" id="modal-body"></div>
     <div class="export-bar">

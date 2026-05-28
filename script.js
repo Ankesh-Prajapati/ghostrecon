@@ -291,11 +291,15 @@ const ST = {
   engine: 'google',
   qCount: Number(localStorage.getItem('gr_qcount') || 0),
   history: JSON.parse(localStorage.getItem('gr_hist') || '[]'),
+  favorites: JSON.parse(localStorage.getItem('gr_favs') || '[]'),
   bulk: [],
   currentCat: null,
   savedTarget: localStorage.getItem('gr_target') || '',
   _pendingQueries: [],
   _pendingWhy: '',
+  _sevFilter: 'all',
+  _globalResults: [],
+  _recentLaunches: [],
 };
 
 /* ══════════════════════════════════════════════════════
@@ -307,6 +311,9 @@ const ENGINES = {
   duckduckgo: q => 'https://duckduckgo.com/?q=' + encodeURIComponent(q),
   brave:      q => 'https://search.brave.com/search?q=' + encodeURIComponent(q),
   yandex:     q => 'https://yandex.com/search/?text=' + encodeURIComponent(q),
+  shodan:     q => 'https://www.shodan.io/search?query=' + encodeURIComponent(q),
+  censys:     q => 'https://search.censys.io/search?resource=hosts&q=' + encodeURIComponent(q),
+  github:     q => 'https://github.com/search?q=' + encodeURIComponent(q) + '&type=code',
 };
 
 /* ══════════════════════════════════════════════════════
@@ -322,6 +329,8 @@ document.addEventListener('DOMContentLoaded', function() {
   renderCats();
   refreshCounter();
   renderHist();
+  renderFavs();
+  updateFavCount();
   previewQuery();
 
   // Engine buttons
@@ -333,12 +342,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 
-  // Nav tabs
+  // Nav tabs — include favs
   document.querySelectorAll('[data-page]').forEach(function(b) {
     b.addEventListener('click', function() {
       document.querySelectorAll('[data-page]').forEach(function(x) { x.classList.remove('active'); });
       b.classList.add('active');
-      ['tool','custom','history','ref'].forEach(function(p) {
+      ['tool','custom','history','ref','favs'].forEach(function(p) {
         document.getElementById('page-' + p).classList.add('hidden');
       });
       document.getElementById('page-' + b.dataset.page).classList.remove('hidden');
@@ -377,6 +386,12 @@ document.addEventListener('DOMContentLoaded', function() {
   // Custom dork enter key
   var ci = document.getElementById('custom-inp');
   if (ci) ci.addEventListener('keypress', function(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); runCustom(); } });
+
+  // Global search — clear results when empty
+  var gs = document.getElementById('global-search');
+  if (gs) {
+    gs.addEventListener('keydown', function(e) { if (e.key === 'Escape') clearGlobalSearch(); });
+  }
 });
 
 /* ══════════════════════════════════════════════════════
@@ -397,10 +412,30 @@ function switchMode(m) {
   ST.mode = m;
   document.getElementById('mc-sec').classList.toggle('active', m === 'sec');
   document.getElementById('mc-media').classList.toggle('active', m === 'media');
-  document.getElementById('status-mode').textContent = m === 'sec' ? 'CYBER_INTEL' : 'FILE_HUNTER';
-  document.getElementById('cat-title').textContent   = m === 'sec' ? 'CYBER INTEL CATEGORIES' : 'FILE HUNTER CATEGORIES';
+  document.getElementById('mc-shodan').classList.toggle('active', m === 'shodan');
+  var modeLabels = { sec: 'CYBER_INTEL', media: 'FILE_HUNTER', shodan: 'SHODAN_INTEL' };
+  var catLabels  = { sec: 'CYBER INTEL CATEGORIES', media: 'FILE HUNTER CATEGORIES', shodan: 'SHODAN / CENSYS QUERIES' };
+  document.getElementById('status-mode').textContent = modeLabels[m] || m.toUpperCase();
+  document.getElementById('cat-title').textContent   = catLabels[m] || 'CATEGORIES';
+  // GA4
+  if (typeof gtag === 'function') gtag('event', 'mode_switch', { mode: m });
   renderCats();
   previewQuery();
+}
+
+function openModal(cat) {
+  ST.currentCat = cat;
+  ST._sevFilter = 'all';
+  document.querySelectorAll('.sev-filter-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.sev === 'all');
+  });
+  document.getElementById('modal-title').innerHTML =
+    '<i class="fas ' + cat.icon + '" style="color:' + cat.color + '"></i> ' + cat.cat;
+  document.getElementById('modal-filter').value = '';
+  renderModalItems(cat.items, '');
+  document.getElementById('modal').classList.add('open');
+  // GA4
+  if (typeof gtag === 'function') gtag('event', 'category_opened', { category: cat.cat, pack: cat.pack || '' });
 }
 
 /* ══════════════════════════════════════════════════════
@@ -439,21 +474,14 @@ function filterCats() {
 /* ══════════════════════════════════════════════════════
    MODAL
 ══════════════════════════════════════════════════════ */
-function openModal(cat) {
-  ST.currentCat = cat;
-  document.getElementById('modal-title').innerHTML =
-    '<i class="fas ' + cat.icon + '" style="color:' + cat.color + '"></i> ' + cat.cat;
-  document.getElementById('modal-filter').value = '';
-  renderModalItems(cat.items, '');
-  document.getElementById('modal').classList.add('open');
-}
-
 function renderModalItems(items, filter) {
   var body = document.getElementById('modal-body');
   body.innerHTML = '';
   var filtered = items.filter(function(i) {
-    return i.l.toLowerCase().includes(filter.toLowerCase()) ||
-           i.d.toLowerCase().includes(filter.toLowerCase());
+    var textMatch = i.l.toLowerCase().includes(filter.toLowerCase()) ||
+                    i.d.toLowerCase().includes(filter.toLowerCase());
+    var sevMatch = ST._sevFilter === 'all' || getSeverity(i, ST.currentCat) === ST._sevFilter;
+    return textMatch && sevMatch;
   });
   if (!filtered.length) {
     body.innerHTML = '<p class="no-results" style="padding:16px;">No dorks match filter.</p>';
@@ -463,10 +491,15 @@ function renderModalItems(items, filter) {
     var div = document.createElement('div');
     div.className = 'dork-item';
     var shownDork = materializeDork(item.d, getTargetFromInput()) || item.d;
+    var sev = getSeverity(item, ST.currentCat);
+    var favActive = isFav(item);
     div.innerHTML =
       '<span class="dork-num">' + String(idx+1).padStart(2,'0') + '</span>' +
       '<div class="dork-info">' +
-        '<div class="dork-label">' + escapeHtml(item.l) + '</div>' +
+        '<div class="dork-label-row">' +
+          '<span class="sev-badge sev-' + sev + '">' + sev.toUpperCase() + '</span>' +
+          '<span class="dork-label">' + escapeHtml(item.l) + '</span>' +
+        '</div>' +
         '<div class="dork-code" title="' + escapeHtml(shownDork) + '">' + escapeHtml(shownDork) + '</div>' +
         '<div class="dork-why">' + escapeHtml(item.why || defaultWhyForItem(item, ST.currentCat)) + '</div>' +
       '</div>' +
@@ -474,12 +507,15 @@ function renderModalItems(items, filter) {
         '<button class="dork-act exec" title="Execute"><i class="fas fa-bolt"></i> Run</button>' +
         '<button class="dork-act copy" title="Copy dork"><i class="fas fa-copy"></i></button>' +
         '<button class="dork-act bulk" title="Add to bulk"><i class="fas fa-layer-group"></i></button>' +
+        '<button class="dork-act fav' + (favActive ? ' fav-active' : '') + '" title="' + (favActive ? 'Remove from favorites' : 'Save to favorites') + '"><i class="fas fa-star"></i></button>' +
         '<button class="dork-act why" title="Why it matters">Why</button>' +
       '</div>';
     var btns = div.querySelectorAll('.dork-act');
     btns[0].addEventListener('click', function() { previewThenExecute(item); });
     btns[1].addEventListener('click', function() { copyText(materializeDork(item.d, getTargetFromInput()) || item.d); });
     btns[2].addEventListener('click', function() { addToBulk(item); });
+    var favBtn = div.querySelector('.dork-act.fav');
+    if (favBtn) favBtn.addEventListener('click', function(e){ toggleFav(item, favBtn); e.stopPropagation(); });
     var whyBtn = div.querySelector('.dork-act.why');
     if (whyBtn) whyBtn.addEventListener('click', function(e){ toggleWhy(div, item); e.stopPropagation(); });
     body.appendChild(div);
@@ -580,6 +616,25 @@ function launchSearch(q) {
   localStorage.setItem('gr_qcount', ST.qCount);
   refreshCounter();
   addToHist(q);
+
+  // GA4 — track dork execution
+  if (typeof gtag === 'function') {
+    gtag('event', 'dork_executed', {
+      engine: ST.engine,
+      mode: ST.mode,
+      query_length: q.length
+    });
+  }
+
+  // Rate-limit hint: track launches in last 2 minutes
+  var now = Date.now();
+  ST._recentLaunches = ST._recentLaunches.filter(function(t) { return now - t < 120000; });
+  ST._recentLaunches.push(now);
+  if (ST._recentLaunches.length === 10) {
+    toast('⚠️ 10 queries in 2 min — consider switching engines to avoid CAPTCHA', 'warn');
+  } else if (ST._recentLaunches.length > 10 && ST._recentLaunches.length % 5 === 0) {
+    toast('⚠️ ' + ST._recentLaunches.length + ' rapid queries — rotate engines: Bing, DDG, or Brave', 'warn');
+  }
 }
 
 function previewQuery() {
@@ -1129,6 +1184,102 @@ function enrichDorks(){
       if (!it.why) it.why = defaultWhyForItem(it, cat);
     });
   });
+
+  /* ── GITHUB ADVANCED DORKING ─────────────────────────── */
+  addDorkCategory({ type:'sec', cat:'GitHub Advanced Dorking', pack:'Code', icon:'fa-github', color:'#f0f6ff', items:[
+    {l:'path:.env secrets', d:'site:github.com path:.env "SECRET_KEY" OR "API_KEY" OR "DB_PASSWORD"', why:'Developers accidentally commit .env files with live credentials, exposing keys and database URLs.', sev:'critical'},
+    {l:'language:Python API keys', d:'site:github.com language:Python "API_KEY" OR "AWS_SECRET_ACCESS_KEY" OR "DB_PASSWORD"', why:'Python config and settings files commonly hardcode secrets in variable assignments.', sev:'critical'},
+    {l:'language:JavaScript secrets', d:'site:github.com language:JavaScript "apiKey" OR "client_secret" OR "access_token" -test -mock', why:'JavaScript files frequently contain hardcoded API keys and endpoint tokens.', sev:'high'},
+    {l:'extension:pem private keys', d:'site:github.com extension:pem "BEGIN PRIVATE KEY" OR "BEGIN RSA PRIVATE KEY"', why:'Private key files accidentally pushed to GitHub can enable server impersonation and traffic decryption.', sev:'critical'},
+    {l:'filename:id_rsa SSH keys', d:'site:github.com filename:id_rsa OR filename:id_ed25519 "PRIVATE KEY"', why:'SSH private keys in public repos give direct server access to anyone who finds them.', sev:'critical'},
+    {l:'filename:wp-config credentials', d:'site:github.com filename:wp-config.php "DB_PASSWORD" OR "AUTH_KEY"', why:'WordPress config files pushed to GitHub expose database credentials and security salts.', sev:'critical'},
+    {l:'extension:sql with credentials', d:'site:github.com extension:sql "INSERT INTO" "password" OR "email"', why:'SQL dump files committed to repos can contain full database exports with user records.', sev:'high'},
+    {l:'path:config access tokens', d:'site:github.com path:config "access_token" OR "client_secret" OR "bearer"', why:'Config directory files across any language frequently store service credentials.', sev:'high'},
+    {l:'CI/CD secrets in workflows', d:'site:github.com path:.github/workflows "password" OR "secret" OR "token"', why:'GitHub Actions workflow files sometimes log or hardcode secrets during development.', sev:'high'},
+    {l:'filename:.npmrc auth tokens', d:'site:github.com filename:.npmrc "_authToken" OR "//registry.npmjs.org"', why:'NPM auth tokens pushed via .npmrc files allow publishing under the victim\'s identity.', sev:'critical'},
+  ]});
+
+  /* ── CVE EXPLOIT PATTERNS ────────────────────────────── */
+  addDorkCategory({ type:'sec', cat:'CVE Exploit Patterns', pack:'Vulnerabilities', icon:'fa-skull-crossbones', color:'#ef4444', items:[
+    {l:'Log4Shell (CVE-2021-44228)', d:'intext:"log4j-core-2." filetype:xml OR filetype:jar OR intitle:"log4j"', why:'Log4j versions 2.0–2.14.1 are vulnerable to RCE via JNDI injection. Finding exposed deployments enables patching verification.', sev:'critical'},
+    {l:'Spring4Shell (CVE-2022-22965)', d:'inurl:/actuator intitle:"Spring" OR intext:"Spring Framework 5.3" -site:spring.io', why:'Spring MVC apps on Tomcat with JDK 9+ were vulnerable to RCE via class loader manipulation.', sev:'critical'},
+    {l:'Apache Struts RCE', d:'intitle:"Struts Problem Report" intext:"development mode is enabled"', why:'Apache Struts debug pages in development mode indicate CVE-2017-5638 style exposure.', sev:'critical'},
+    {l:'ProxyShell / Exchange OWA', d:'intitle:"Outlook Web App" inurl:"/owa/auth/logon.aspx"', why:'Unpatched Exchange servers exposed at OWA are candidates for ProxyShell (CVE-2021-34473/34523/31207).', sev:'critical'},
+    {l:'Citrix Gateway (CVE-2019-19781)', d:'inurl:"/vpn/index.html" intitle:"Citrix Gateway" OR intitle:"Citrix ADC"', why:'Unpatched Citrix ADC/Gateway instances are vulnerable to unauthenticated RCE via path traversal.', sev:'critical'},
+    {l:'VMware vCenter exposure', d:'intitle:"VMware vSphere Web Client" OR intitle:"VMware vCenter Server"', why:'Exposed vCenter instances may be vulnerable to multiple critical CVEs including VMSA-2021-0010.', sev:'critical'},
+    {l:'F5 BIG-IP TMUI', d:'intitle:"BIG-IP" inurl:"/tmui/login.jsp" OR inurl:"/tmui/tmui/login"', why:'F5 BIG-IP TMUI exposed to the internet is a candidate for CVE-2020-5902 unauthenticated RCE.', sev:'critical'},
+    {l:'Confluence RCE (CVE-2022-26134)', d:'intitle:"Confluence" inurl:"/login.action" OR inurl:"/display/"', why:'Unpatched Confluence servers are vulnerable to unauthenticated OGNL injection RCE.', sev:'critical'},
+    {l:'GitLab RCE (CVE-2021-22205)', d:'intitle:"GitLab" inurl:"/-/users/sign_in" -"gitlab.com"', why:'Self-hosted GitLab instances below 13.10.3 are vulnerable to unauthenticated RCE via ExifTool.', sev:'critical'},
+    {l:'Fortinet SSL-VPN login', d:'intitle:"FortiGate SSL VPN" OR intitle:"FortiGate" inurl:"/remote/login"', why:'Exposed Fortinet SSL-VPN instances may be vulnerable to CVE-2022-40684 or CVE-2023-27997.', sev:'critical'},
+    {l:'Pulse Secure VPN', d:'intitle:"Pulse Secure" inurl:"/dana-na/auth/url_default/welcome.cgi"', why:'Pulse Secure VPN portals exposed publicly are candidates for CVE-2019-11510 credential disclosure.', sev:'critical'},
+    {l:'Drupal login (Drupalgeddon)', d:'inurl:"/user/login" intext:"Drupal" -drupal.org', why:'Drupal sites not patched for SA-CORE-2018-002/004 are vulnerable to unauthenticated RCE.', sev:'high'},
+  ]});
+
+  /* ── OAUTH & SSO MISCONFIGURATIONS ───────────────────── */
+  addDorkCategory({ type:'sec', cat:'OAuth & SSO Misconfigs', pack:'Auth', icon:'fa-id-badge', color:'#818cf8', items:[
+    {l:'Open redirect_uri params', d:'inurl:"oauth/authorize?redirect_uri=" OR inurl:"oauth2/authorize?redirect_uri="', why:'Open redirect_uri parameters can allow attackers to steal authorization codes by redirecting to attacker-controlled URLs.', sev:'high'},
+    {l:'Indexed OAuth callbacks with code', d:'inurl:"/callback?code=" OR inurl:"/oauth/callback?code="', why:'Authorization codes indexed in search results are expired but indicate misconfigured token logging or redirect chains.', sev:'high'},
+    {l:'Implicit flow access tokens in URL', d:'inurl:"#access_token=" OR inurl:"?access_token=" OR inurl:"token_type=bearer"', why:'Access tokens appearing in URLs get stored in browser history, server logs, and search indexes — a critical secret exposure.', sev:'critical'},
+    {l:'SAML assertion endpoints', d:'inurl:"/saml/acs" OR inurl:"/saml2/acs" OR inurl:"/sso/saml"', why:'SAML Assertion Consumer Service endpoints need strict validation. Exposed endpoints may be vulnerable to XML signature wrapping.', sev:'high'},
+    {l:'Misconfigured client_id in URLs', d:'inurl:"client_id=" inurl:"redirect_uri=" inurl:"response_type="', why:'OAuth flows exposing client IDs, redirect URIs, and response types in search results reveal app registration details.', sev:'medium'},
+    {l:'Token endpoint exposure', d:'inurl:"/oauth/token" OR inurl:"/oauth2/token" OR inurl:"/connect/token"', why:'Exposed OAuth token endpoints should require mTLS or signed client assertions to prevent credential stuffing.', sev:'medium'},
+    {l:'OIDC discovery documents', d:'inurl:"/.well-known/openid-configuration" OR inurl:"/.well-known/oauth-authorization-server"', why:'OIDC discovery docs enumerate all auth endpoints and supported flows — useful for mapping the full SSO attack surface.', sev:'info'},
+    {l:'SSO error page fingerprinting', d:'intitle:"Sorry, we could not sign you in" OR intitle:"Authentication Error" intext:"SSO"', why:'SSO error pages can reveal IdP vendor, tenant IDs, and misconfiguration details useful for targeted attacks.', sev:'info'},
+    {l:'Okta / Auth0 tenant discovery', d:'inurl:".okta.com/login" OR inurl:".auth0.com/login" OR inurl:".onelogin.com/login"', why:'Identifies SSO tenant subdomains for enumeration of users, apps, and authentication policy via the respective IdP API.', sev:'medium'},
+    {l:'Azure AD login endpoints', d:'inurl:"login.microsoftonline.com" intext:"tenant" OR inurl:"/common/oauth2/v2.0/authorize"', why:'Azure AD tenant references and indexed OAuth flows can expose tenant IDs and app client IDs for further enumeration.', sev:'medium'},
+  ]});
+
+  /* ══════════════════════════════════════════════════════
+     SHODAN / CENSYS INTEL CATEGORIES (type:'shodan')
+  ══════════════════════════════════════════════════════ */
+  addDorkCategory({ type:'shodan', cat:'Web Server Discovery', pack:'Infrastructure', icon:'fa-server', color:'#06b6d4', items:[
+    {l:'Default nginx pages', d:'http.title:"Welcome to nginx" product:"nginx"', why:'Default nginx pages indicate recent deploys or misconfigured servers open for further enumeration.', sev:'medium'},
+    {l:'Default Apache pages', d:'http.title:"Apache2 Ubuntu Default Page" product:"Apache httpd"', why:'Apache default pages confirm the web server version and that no application has been deployed.', sev:'medium'},
+    {l:'IIS default pages', d:'http.title:"IIS Windows Server" product:"Microsoft IIS httpd"', why:'Default IIS pages expose the Windows and IIS versions for vulnerability matching.', sev:'medium'},
+    {l:'Open directory listings', d:'http.title:"Index of /" -"redirected"', why:'HTTP directory listings let attackers browse file trees and discover sensitive files without authentication.', sev:'high'},
+    {l:'Phishing / parked pages', d:'http.title:"Account Suspended" OR http.title:"Parking Page"', why:'Suspended or parked domains may be candidates for domain takeover or brand impersonation.', sev:'info'},
+    {l:'Server version banners', d:'http.server:"Apache/2.2" OR http.server:"Apache/2.4.49"', why:'Specific version banners allow fast correlation with known CVEs for prioritized patching.', sev:'high'},
+  ]});
+  addDorkCategory({ type:'shodan', cat:'Exposed Databases', pack:'Database', icon:'fa-database', color:'#10b981', items:[
+    {l:'Open MongoDB (no auth)', d:'product:"MongoDB" port:27017 -"SCRAM" -"x.509"', why:'MongoDB instances without authentication expose all data to any network-reachable client.', sev:'critical'},
+    {l:'Open Redis', d:'product:"Redis" port:6379', why:'Unauthenticated Redis allows full data read/write and can be abused for SSRF pivoting.', sev:'critical'},
+    {l:'Exposed Elasticsearch', d:'product:"Elastic" port:9200 -"security_enabled"', why:'Open Elasticsearch clusters expose all indexed data and may allow index deletion.', sev:'critical'},
+    {l:'Open MySQL', d:'product:"MySQL" port:3306 "unauthorized"', why:'Publicly accessible MySQL instances indicate a firewall misconfiguration with high-risk data exposure.', sev:'critical'},
+    {l:'CouchDB admin interfaces', d:'product:"CouchDB" port:5984', why:'CouchDB without authentication exposes the Futon/Fauxton admin UI and all databases.', sev:'critical'},
+    {l:'Exposed Cassandra', d:'product:"Cassandra" port:9042', why:'Cassandra nodes reachable from the internet allow unauthenticated data queries.', sev:'critical'},
+  ]});
+  addDorkCategory({ type:'shodan', cat:'DevOps & CI/CD Exposure', pack:'DevOps', icon:'fa-code-branch', color:'#a78bfa', items:[
+    {l:'Jenkins instances', d:'http.title:"Dashboard [Jenkins]" OR http.title:"Jenkins"', why:'Exposed Jenkins dashboards may allow unauthenticated job execution or credential theft.', sev:'high'},
+    {l:'Docker Remote API', d:'port:2375 product:"Docker" -"TLS"', why:'Docker daemons listening without TLS allow full container management including exec and volume access.', sev:'critical'},
+    {l:'Kubernetes API server', d:'port:6443 product:"Kubernetes" OR port:8080 "kubectl"', why:'Exposed Kubernetes API servers allow cluster enumeration and may permit privilege escalation to cluster-admin.', sev:'critical'},
+    {l:'Prometheus metrics', d:'http.title:"Prometheus Time Series" port:9090', why:'Open Prometheus instances expose internal service metrics, job names, and often internal IP ranges.', sev:'medium'},
+    {l:'Grafana dashboards', d:'http.title:"Grafana" product:"Grafana Labs Grafana"', why:'Exposed Grafana with anonymous access leaks business metrics, infrastructure topology, and may expose datasource credentials.', sev:'high'},
+    {l:'GitLab instances', d:'http.title:"GitLab" -"GitLab.com"', why:'Self-hosted GitLab exposed to the internet should be patched for multiple critical CVEs including unauthenticated RCE.', sev:'high'},
+  ]});
+  addDorkCategory({ type:'shodan', cat:'IoT & Industrial Control', pack:'IoT', icon:'fa-microchip', color:'#fb923c', items:[
+    {l:'Hikvision IP cameras', d:'product:"Hikvision IP Camera" has_screenshot:true', why:'Hikvision cameras without authentication expose live video feeds and location intelligence.', sev:'high'},
+    {l:'Webcam portals', d:'http.title:"webcam" has_screenshot:true port:80', why:'Public-facing webcams can reveal sensitive physical locations, schedules, and security posture.', sev:'high'},
+    {l:'Modbus SCADA systems', d:'port:502 product:"Modbus"', why:'Modbus is an industrial control protocol with no authentication — exposure can allow manipulation of physical systems.', sev:'critical'},
+    {l:'BACnet building systems', d:'port:47808 "BACnet"', why:'BACnet devices control HVAC, lighting, and access systems. Exposure enables physical environment manipulation.', sev:'critical'},
+    {l:'Printer admin interfaces', d:'http.title:"Printer" OR http.title:"HP LaserJet" port:80', why:'Exposed printer admin pages may allow document capture, firmware modification, and network pivoting.', sev:'medium'},
+    {l:'VNC no-auth servers', d:'port:5900 product:"VNC" -"password"', why:'VNC servers without password protection provide full graphical desktop control to anyone who connects.', sev:'critical'},
+  ]});
+  addDorkCategory({ type:'shodan', cat:'Network Devices & VPNs', pack:'Network', icon:'fa-network-wired', color:'#38bdf8', items:[
+    {l:'Exposed RDP (3389)', d:'port:3389 product:"Microsoft Terminal Services" os:"Windows"', why:'Public RDP is a primary brute-force and exploitation target. Exposure should be immediately restricted.', sev:'critical'},
+    {l:'Fortinet SSL-VPN', d:'http.title:"FortiGate SSL VPN" OR ssl.cert.subject.cn:"FortiGate"', why:'Fortinet SSL-VPN instances may be vulnerable to critical CVEs enabling credential theft or RCE.', sev:'critical'},
+    {l:'Pulse/Ivanti Secure VPN', d:'http.title:"Pulse Secure" ssl.cert.subject.cn:"pulsesecure"', why:'Pulse Secure VPNs have active CVEs allowing unauthenticated credential and session theft.', sev:'critical'},
+    {l:'Cisco ASA VPN login', d:'http.title:"Cisco ASDM" OR http.html:"clientless" ssl.cert.subject.cn:"cisco"', why:'Cisco ASA/FTD VPN appliances have multiple high-severity CVEs in the web management interface.', sev:'high'},
+    {l:'pfSense / OPNsense', d:'http.title:"pfSense" OR http.title:"OPNsense" port:443', why:'Home and SMB firewall admin UIs exposed publicly allow full network policy manipulation.', sev:'critical'},
+    {l:'SNMP community strings', d:'port:161 product:"SNMP"', why:'SNMP with default community strings (public/private) allows full network device enumeration and configuration access.', sev:'high'},
+  ]});
+  addDorkCategory({ type:'shodan', cat:'Cloud & SaaS Services', pack:'Cloud', icon:'fa-cloud', color:'#60a5fa', items:[
+    {l:'Exposed MinIO consoles', d:'http.title:"MinIO Browser" OR product:"MinIO" port:9000', why:'MinIO object storage admin consoles allow unauthenticated bucket browsing if access keys are not set.', sev:'critical'},
+    {l:'Exposed Portainer', d:'http.title:"Portainer" port:9000 OR port:9443', why:'Portainer Docker management UI without authentication gives full container orchestration access.', sev:'critical'},
+    {l:'HashiCorp Vault', d:'http.title:"Vault" port:8200 product:"HashiCorp Vault"', why:'Vault instances in unsealed state without ACLs may expose secrets engines and backend credentials.', sev:'critical'},
+    {l:'Consul service discovery', d:'http.title:"Consul" port:8500', why:'Open Consul UIs disclose service mesh topology, health checks, and may allow service deregistration.', sev:'high'},
+    {l:'Exposed Airflow UI', d:'http.title:"Airflow" port:8080', why:'Airflow web UIs without authentication expose DAG code, connection credentials, and pipeline history.', sev:'high'},
+    {l:'Exposed RabbitMQ UI', d:'http.title:"RabbitMQ Management" port:15672', why:'RabbitMQ management UI with default credentials gives full message queue access and credential storage.', sev:'high'},
+  ]});
 }
 
 enrichDorks();
@@ -1141,15 +1292,264 @@ function toast(msg, type) {
   var wrap = document.getElementById('toast-wrap');
   var t = document.createElement('div');
   t.className = 'toast ' + type;
-  t.innerHTML = '<i class="fas fa-' + (type === 'ok' ? 'check' : 'exclamation-circle') + '"></i> ' + msg;
+  var icon = type === 'ok' ? 'check' : type === 'warn' ? 'exclamation-triangle' : 'exclamation-circle';
+  t.innerHTML = '<i class="fas fa-' + icon + '"></i> ' + msg;
   wrap.appendChild(t);
   setTimeout(function() { t.classList.add('show'); }, 10);
+  var dur = type === 'warn' ? 5500 : 3000;
   setTimeout(function() {
     t.classList.remove('show');
     setTimeout(function() { t.remove(); }, 300);
-  }, 3000);
+  }, dur);
 }
 
 function scrollToTop() {
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ══════════════════════════════════════════════════════
+   SEVERITY SCORING
+══════════════════════════════════════════════════════ */
+function getSeverity(item, cat) {
+  if (item && item.sev) return item.sev;
+  var catName = ((cat && cat.cat) || '').toLowerCase();
+  var label   = ((item && item.l) || '').toLowerCase();
+  var dork    = ((item && item.d) || '').toLowerCase();
+
+  // CRITICAL — direct credential / key / RCE exposure
+  if (label.includes('private key') || label.includes('aws access') || label.includes('bearer') ||
+      label.includes('stripe live') || dork.includes('begin private key') || dork.includes('begin rsa') ||
+      dork.includes('akia') || label.includes('sql dump') || label.includes('database dump') ||
+      catName.includes('cve') || label.includes('log4') || label.includes('spring4') ||
+      label.includes('id_rsa') || label.includes('ssh key') || label.includes('kubeconfig') ||
+      label.includes('terraform state')) return 'critical';
+
+  // HIGH — tokens, secrets, admin panels, config leaks
+  if (catName.includes('secrets') || catName.includes('token') || label.includes('token') ||
+      label.includes('api key') || label.includes('webhook secret') || catName.includes('admin') ||
+      label.includes('admin') || catName.includes('database') || label.includes('.env') ||
+      label.includes('wp-config') || label.includes('firebase token') || label.includes('slack token') ||
+      label.includes('stripe') || label.includes('sendgrid') || label.includes('twilio') ||
+      catName.includes('oauth')) return 'high';
+
+  // MEDIUM — cloud exposure, error leaks, staging, backup, login surfaces
+  if (catName.includes('cloud') || catName.includes('config') || label.includes('login') ||
+      label.includes('error') || catName.includes('backup') || label.includes('backup') ||
+      catName.includes('firebase') || catName.includes('staging') || label.includes('debug') ||
+      catName.includes('paste') || label.includes('password reset') || label.includes('upload')) return 'medium';
+
+  // INFO — everything else
+  return 'info';
+}
+
+/* ══════════════════════════════════════════════════════
+   SEVERITY FILTER
+══════════════════════════════════════════════════════ */
+function setSevFilter(sev) {
+  ST._sevFilter = sev;
+  document.querySelectorAll('.sev-filter-btn').forEach(function(b) {
+    b.classList.toggle('active', b.dataset.sev === sev);
+  });
+  filterModal();
+}
+
+/* ══════════════════════════════════════════════════════
+   FAVORITES
+══════════════════════════════════════════════════════ */
+function isFav(item) {
+  return ST.favorites.some(function(f) { return f.d === item.d; });
+}
+
+function toggleFav(item, btn) {
+  var idx = ST.favorites.findIndex(function(f) { return f.d === item.d; });
+  if (idx >= 0) {
+    ST.favorites.splice(idx, 1);
+    toast('Removed from favorites', 'ok');
+    if (btn) { btn.classList.remove('fav-active'); btn.title = 'Save to favorites'; }
+  } else {
+    ST.favorites.push({ l: item.l, d: item.d, why: item.why || '' });
+    toast('⭐ Saved: ' + item.l, 'ok');
+    if (btn) { btn.classList.add('fav-active'); btn.title = 'Remove from favorites'; }
+  }
+  localStorage.setItem('gr_favs', JSON.stringify(ST.favorites));
+  updateFavCount();
+  renderFavs();
+}
+
+function updateFavCount() {
+  var badge = document.getElementById('fav-nav-count');
+  if (!badge) return;
+  if (ST.favorites.length > 0) {
+    badge.textContent = ST.favorites.length;
+    badge.style.display = 'inline-flex';
+  } else {
+    badge.style.display = 'none';
+  }
+}
+
+function renderFavs() {
+  var el = document.getElementById('fav-grid');
+  if (!el) return;
+  if (!ST.favorites.length) {
+    el.innerHTML = '<p class="no-results">No favorites saved yet. Open any category and click <i class="fas fa-star"></i> on any dork to bookmark it here.</p>';
+    return;
+  }
+  el.innerHTML = ST.favorites.map(function(item, i) {
+    var shownDork = materializeDork(item.d, getTargetFromInput()) || item.d;
+    var sev = getSeverity(item, null);
+    return '<div class="hist-item fav-item">' +
+      '<div class="dork-info" style="flex:1;min-width:0;">' +
+        '<div class="dork-label-row" style="margin-bottom:4px;">' +
+          '<span class="sev-badge sev-' + sev + '">' + sev.toUpperCase() + '</span>' +
+          '<span class="dork-label" style="font-size:13px;">' + escapeHtml(item.l) + '</span>' +
+        '</div>' +
+        '<div class="dork-code" style="font-size:12px;color:var(--acid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="' + escapeHtml(shownDork) + '">' + escapeHtml(shownDork) + '</div>' +
+      '</div>' +
+      '<div class="dork-actions" style="flex-shrink:0;">' +
+        '<button class="dork-act exec" data-fidx="' + i + '" title="Run"><i class="fas fa-bolt"></i></button>' +
+        '<button class="dork-act copy" data-fidx="' + i + '" title="Copy"><i class="fas fa-copy"></i></button>' +
+        '<button class="dork-act bulk" data-fidx="' + i + '" title="Add to bulk"><i class="fas fa-layer-group"></i></button>' +
+        '<button class="dork-act fav fav-active" data-fidx="' + i + '" title="Remove from favorites"><i class="fas fa-star"></i></button>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+
+  // Wire events
+  el.querySelectorAll('.dork-act.exec').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = ST.favorites[parseInt(btn.dataset.fidx)];
+      if (item) { ST.currentCat = null; previewThenExecute(item); }
+    });
+  });
+  el.querySelectorAll('.dork-act.copy').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = ST.favorites[parseInt(btn.dataset.fidx)];
+      if (item) copyText(materializeDork(item.d, getTargetFromInput()) || item.d);
+    });
+  });
+  el.querySelectorAll('.dork-act.bulk').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = ST.favorites[parseInt(btn.dataset.fidx)];
+      if (item) addToBulk(item);
+    });
+  });
+  el.querySelectorAll('.dork-act.fav').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = ST.favorites[parseInt(btn.dataset.fidx)];
+      if (item) toggleFav(item, null);
+    });
+  });
+}
+
+function clearFavs() {
+  if (!ST.favorites.length) { toast('No favorites to clear', 'err'); return; }
+  ST.favorites = [];
+  localStorage.removeItem('gr_favs');
+  updateFavCount();
+  renderFavs();
+  toast('Favorites cleared', 'ok');
+}
+
+function copyAllFavs() {
+  if (!ST.favorites.length) { toast('No favorites to copy', 'err'); return; }
+  var lines = ST.favorites.map(function(item) {
+    return '[' + item.l + ']\n' + (materializeDork(item.d, getTargetFromInput()) || item.d);
+  }).join('\n\n');
+  copyText(lines);
+}
+
+/* ══════════════════════════════════════════════════════
+   GLOBAL SEARCH
+══════════════════════════════════════════════════════ */
+function globalSearch(query) {
+  var q = (query || '').trim().toLowerCase();
+  var el = document.getElementById('global-results');
+  if (!el) return;
+  if (!q) { el.classList.add('hidden'); el.innerHTML = ''; return; }
+
+  var results = [];
+  DORKS.forEach(function(cat) {
+    cat.items.forEach(function(item) {
+      if (item.l.toLowerCase().includes(q) || item.d.toLowerCase().includes(q) ||
+          cat.cat.toLowerCase().includes(q) || (cat.pack || '').toLowerCase().includes(q)) {
+        results.push({ cat: cat, item: item });
+      }
+    });
+  });
+  ST._globalResults = results;
+  renderGlobalResults(results, q);
+}
+
+function renderGlobalResults(results, query) {
+  var el = document.getElementById('global-results');
+  if (!results.length) {
+    el.innerHTML = '<p class="no-results" style="padding:12px 0 4px;">No dorks match "' + escapeHtml(query) + '" across any category.</p>';
+    el.classList.remove('hidden');
+    return;
+  }
+  var shown = results.slice(0, 40);
+  el.innerHTML =
+    '<div class="global-results-header">' +
+      '<span><i class="fas fa-search" style="color:var(--acid);margin-right:5px;"></i>' + results.length + ' dorks matched</span>' +
+      (results.length > 40 ? '<span style="color:var(--text-muted);font-size:11px;">Showing first 40 — refine to narrow</span>' : '') +
+    '</div>' +
+    shown.map(function(r, idx) {
+      var shownDork = materializeDork(r.item.d, getTargetFromInput()) || r.item.d;
+      var sev = getSeverity(r.item, r.cat);
+      return '<div class="dork-item">' +
+        '<div class="dork-info">' +
+          '<div class="dork-label-row">' +
+            '<span class="sev-badge sev-' + sev + '">' + sev.toUpperCase() + '</span>' +
+            '<span style="font-size:10px;color:var(--ghost-bright);letter-spacing:1px;">' + escapeHtml(r.cat.cat) + '</span>' +
+          '</div>' +
+          '<div class="dork-label">' + escapeHtml(r.item.l) + '</div>' +
+          '<div class="dork-code" title="' + escapeHtml(shownDork) + '">' + escapeHtml(shownDork) + '</div>' +
+        '</div>' +
+        '<div class="dork-actions">' +
+          '<button class="dork-act exec" data-gidx="' + idx + '"><i class="fas fa-bolt"></i> Run</button>' +
+          '<button class="dork-act copy" data-gidx="' + idx + '"><i class="fas fa-copy"></i></button>' +
+          '<button class="dork-act fav' + (isFav(r.item) ? ' fav-active' : '') + '" data-gidx="' + idx + '" title="Favorite"><i class="fas fa-star"></i></button>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+
+  el.querySelectorAll('.dork-act.exec').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var r = ST._globalResults[parseInt(btn.dataset.gidx)];
+      if (r) { ST.currentCat = r.cat; previewThenExecute(r.item); }
+    });
+  });
+  el.querySelectorAll('.dork-act.copy').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var r = ST._globalResults[parseInt(btn.dataset.gidx)];
+      if (r) copyText(materializeDork(r.item.d, getTargetFromInput()) || r.item.d);
+    });
+  });
+  el.querySelectorAll('.dork-act.fav').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var r = ST._globalResults[parseInt(btn.dataset.gidx)];
+      if (r) { toggleFav(r.item, btn); }
+    });
+  });
+
+  el.classList.remove('hidden');
+}
+
+function clearGlobalSearch() {
+  var inp = document.getElementById('global-search');
+  if (inp) inp.value = '';
+  var el = document.getElementById('global-results');
+  if (el) { el.classList.add('hidden'); el.innerHTML = ''; }
+}
+
+/* ══════════════════════════════════════════════════════
+   COPY BULK QUEUE
+══════════════════════════════════════════════════════ */
+function copyBulkQueue() {
+  if (!ST.bulk.length) { toast('No dorks in bulk queue', 'err'); return; }
+  var lines = ST.bulk.map(function(item) {
+    return '[' + item.l + ']\n' + (buildQuery(item.d));
+  }).join('\n\n');
+  copyText(lines);
+  toast('Copied ' + ST.bulk.length + ' queries to clipboard', 'ok');
 }
