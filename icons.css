@@ -81,6 +81,10 @@
 .fa-book-open:before{content:"\f518"}
 .fa-warning:before{content:"\f071"}
 .fa-database:before{content:"\f1c0"}
+.fa-star:before{content:"\f005"}
+.fa-skull-crossbones:before{content:"\f714"}
+.fa-id-badge:before{content:"\f2c1"}
+.fa-broadcast-tower:before{content:"\f519"}
 
 /* FA5->FA6 compat aliases */
 .fa-bolt:before{content:"\e0b7"}

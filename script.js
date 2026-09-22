@@ -1186,7 +1186,7 @@ function enrichDorks(){
   });
 
   /* ── GITHUB ADVANCED DORKING ─────────────────────────── */
-  addDorkCategory({ type:'sec', cat:'GitHub Advanced Dorking', pack:'Code', icon:'fa-github', color:'#f0f6ff', items:[
+  addDorkCategory({ type:'sec', cat:'GitHub Advanced Dorking', pack:'Code', icon:'fa-code-branch', color:'#f0f6ff', items:[
     {l:'path:.env secrets', d:'site:github.com path:.env "SECRET_KEY" OR "API_KEY" OR "DB_PASSWORD"', why:'Developers accidentally commit .env files with live credentials, exposing keys and database URLs.', sev:'critical'},
     {l:'language:Python API keys', d:'site:github.com language:Python "API_KEY" OR "AWS_SECRET_ACCESS_KEY" OR "DB_PASSWORD"', why:'Python config and settings files commonly hardcode secrets in variable assignments.', sev:'critical'},
     {l:'language:JavaScript secrets', d:'site:github.com language:JavaScript "apiKey" OR "client_secret" OR "access_token" -test -mock', why:'JavaScript files frequently contain hardcoded API keys and endpoint tokens.', sev:'high'},
