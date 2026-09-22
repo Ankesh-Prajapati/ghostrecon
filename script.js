@@ -9,7 +9,7 @@
 ══════════════════════════════════════════════════════ */
 const DORKS = [
   // ── CYBER INTEL ──────────────────────────────────────
-  { type:'sec', cat:'Attack Surface Mapping', icon:'fa-map-marked-alt', color:'#a78bfa', items:[
+  { type:'sec', cat:'Attack Surface Mapping', icon:'fa-map-marked-alt', color:'#22d3ee', items:[
     {l:'Exposed login endpoints',        d:'inurl:login OR inurl:signin OR inurl:auth'},
     {l:'Admin areas',                    d:'inurl:admin OR inurl:dashboard OR inurl:administrator'},
     {l:'Staging/pre-prod environments',  d:'inurl:staging OR inurl:preprod OR inurl:uat OR inurl:dev'},
@@ -19,7 +19,7 @@ const DORKS = [
     {l:'Open redirect candidates',       d:'inurl:redirect= OR inurl:return= OR inurl:url= OR inurl:next='},
     {l:'Debug & diagnostic endpoints',   d:'inurl:debug OR inurl:console OR inurl:/actuator'},
   ]},
-  { type:'sec', cat:'Secrets & Tokens', icon:'fa-key', color:'#f59e0b', items:[
+  { type:'sec', cat:'Secrets & Tokens', icon:'fa-key', color:'#ffc94d', items:[
     {l:'API keys in source',             d:'intext:"api_key" OR intext:"apiKey" OR intext:"client_secret"'},
     {l:'Bearer JWT tokens',              d:'intext:"Bearer eyJ"'},
     {l:'AWS access keys',                d:'intext:"AKIA" OR intext:"aws_secret_access_key"'},
@@ -31,7 +31,7 @@ const DORKS = [
     {l:'Stripe live keys',               d:'intext:"sk_live_" OR intext:"pk_live_"'},
     {l:'Firebase tokens',                d:'intext:"firebaseio.com" OR intext:"firebase_token"'},
   ]},
-  { type:'sec', cat:'Exposed Documents', icon:'fa-file-shield', color:'#ef4444', items:[
+  { type:'sec', cat:'Exposed Documents', icon:'fa-file-shield', color:'#f472b6', items:[
     {l:'PDF files',                      d:'filetype:pdf'},
     {l:'Spreadsheets',                   d:'filetype:xls OR filetype:xlsx OR filetype:csv'},
     {l:'Word documents',                 d:'filetype:doc OR filetype:docx'},
@@ -60,7 +60,7 @@ const DORKS = [
     {l:'IAM policy misconfigs',          d:'intext:"s3:PutObject" filetype:json'},
     {l:'Exposed GCP credentials',        d:'filetype:json intext:"auth_uri" intext:"token_uri"'},
   ]},
-  { type:'sec', cat:'Database Exposure', icon:'fa-database', color:'#10b981', items:[
+  { type:'sec', cat:'Database Exposure', icon:'fa-database', color:'#f472b6', items:[
     {l:'SQL dumps',                      d:'filetype:sql intext:"CREATE TABLE"'},
     {l:'Database backups',               d:'filetype:bak OR filetype:dump'},
     {l:'SQLite files',                   d:'filetype:sqlite OR filetype:db'},
@@ -70,7 +70,7 @@ const DORKS = [
     {l:'phpMyAdmin interfaces',          d:'inurl:phpmyadmin OR intitle:phpMyAdmin'},
     {l:'Adminer portals',                d:'inurl:adminer.php OR inurl:adminer'},
   ]},
-  { type:'sec', cat:'API Reconnaissance', icon:'fa-plug', color:'#c084fc', items:[
+  { type:'sec', cat:'API Reconnaissance', icon:'fa-plug', color:'#22d3ee', items:[
     {l:'Swagger UI',                     d:'inurl:swagger OR inurl:api-docs OR intitle:swagger'},
     {l:'OpenAPI spec files',             d:'filetype:json intext:"openapi" OR filetype:yaml intext:"openapi"'},
     {l:'GraphQL endpoints',              d:'inurl:graphql OR inurl:/graphql'},
@@ -78,7 +78,7 @@ const DORKS = [
     {l:'Postman collections',            d:'filetype:json intext:"postman_collection"'},
     {l:'SOAP WSDL files',               d:'filetype:wsdl OR inurl:?wsdl'},
   ]},
-  { type:'sec', cat:'Logs & Debug Output', icon:'fa-bug', color:'#f87171', items:[
+  { type:'sec', cat:'Logs & Debug Output', icon:'fa-bug', color:'#34d399', items:[
     {l:'Application error logs',         d:'filetype:log intext:error'},
     {l:'Python tracebacks',              d:'intext:"Traceback (most recent call last)"'},
     {l:'SQL syntax errors',              d:'intext:"SQL syntax" OR intext:"mysql_fetch_array"'},
@@ -87,7 +87,7 @@ const DORKS = [
     {l:'Django/Flask errors',            d:'intitle:"Page not found" intext:Django OR intitle:"ValueError" intext:Flask'},
     {l:'Verbose API error JSON',         d:'intext:"stack" intext:"message" filetype:json'},
   ]},
-  { type:'sec', cat:'Admin Panel Discovery', icon:'fa-user-shield', color:'#34d399', items:[
+  { type:'sec', cat:'Admin Panel Discovery', icon:'fa-user-shield', color:'#a78bfa', items:[
     {l:'Generic admin URLs',             d:'inurl:admin OR inurl:administrator OR inurl:/manage'},
     {l:'WordPress login',                d:'inurl:wp-login.php OR inurl:wp-admin'},
     {l:'cPanel',                         d:'inurl:cpanel OR intitle:cPanel'},
@@ -98,7 +98,7 @@ const DORKS = [
     {l:'Kibana dashboards',              d:'intitle:Kibana inurl:app'},
     {l:'Grafana login',                  d:'intitle:Grafana inurl:login'},
   ]},
-  { type:'sec', cat:'Vulnerability Research', icon:'fa-search-plus', color:'#86efac', items:[
+  { type:'sec', cat:'Vulnerability Research', icon:'fa-search-plus', color:'#ef4444', items:[
     {l:'XSS parameter candidates',       d:'inurl:q= OR inurl:search= OR inurl:query= OR inurl:s='},
     {l:'LFI/path traversal params',      d:'inurl:file= OR inurl:path= OR inurl:include= OR inurl:page='},
     {l:'Upload forms',                   d:'inurl:upload OR intext:"type=\\"file\\""'},
@@ -106,7 +106,7 @@ const DORKS = [
     {l:'SQL injection candidates',       d:'inurl:id= OR inurl:cat= OR inurl:product_id='},
     {l:'IDOR enumeration',               d:'inurl:user_id= OR inurl:account= OR inurl:doc_id='},
   ]},
-  { type:'sec', cat:'Network Services', icon:'fa-network-wired', color:'#fde68a', items:[
+  { type:'sec', cat:'Network Services', icon:'fa-network-wired', color:'#22d3ee', items:[
     {l:'Exposed Elasticsearch',          d:'intitle:"You Know, for Search"'},
     {l:'Prometheus metrics',             d:'inurl:/metrics intext:prometheus'},
     {l:'Jenkins instances',              d:'intitle:"Dashboard [Jenkins]"'},
@@ -116,14 +116,14 @@ const DORKS = [
     {l:'Hadoop HDFS namenode',           d:'intitle:NameNode inurl:50070'},
     {l:'Consul service mesh',            d:'intitle:Consul inurl:/ui'},
   ]},
-  { type:'sec', cat:'IoT & SCADA', icon:'fa-microchip', color:'#fb923c', items:[
+  { type:'sec', cat:'IoT & SCADA', icon:'fa-microchip', color:'#22d3ee', items:[
     {l:'IP camera interfaces',           d:'intitle:"IP Camera" OR inurl:/view/view.shtml'},
     {l:'Router admin panels',            d:'intitle:"router login" OR intitle:"Router Configuration"'},
     {l:'NAS portals',                    d:'intitle:"NAS" inurl:login'},
     {l:'Industrial HMI/SCADA',           d:'intitle:HMI inurl:scada OR intitle:"SCADA"'},
     {l:'Smart building systems',         d:'intext:"building management system" inurl:login'},
   ]},
-  { type:'sec', cat:'Container & Orchestration', icon:'fa-cubes', color:'#67e8f9', items:[
+  { type:'sec', cat:'Container & Orchestration', icon:'fa-cubes', color:'#22d3ee', items:[
     {l:'Kubernetes Dashboard',           d:'intitle:"Kubernetes Dashboard"'},
     {l:'Docker API exposed',             d:'intext:"Docker Remote API"'},
     {l:'Helm chart files',               d:'filetype:yaml intext:"chart:"'},
@@ -131,7 +131,7 @@ const DORKS = [
     {l:'Docker-compose files',           d:'filename:docker-compose'},
     {l:'GitLab CI config',               d:'filename:.gitlab-ci.yml'},
   ]},
-  { type:'sec', cat:'Backup & Archive Discovery', icon:'fa-archive', color:'#f9a8d4', items:[
+  { type:'sec', cat:'Backup & Archive Discovery', icon:'fa-archive', color:'#f472b6', items:[
     {l:'ZIP backups',                    d:'filetype:zip (backup OR dump OR db)'},
     {l:'TAR archives',                   d:'filetype:tar OR filetype:tar.gz backup'},
     {l:'RAR archives',                   d:'filetype:rar backup'},
@@ -139,7 +139,7 @@ const DORKS = [
     {l:'Site snapshot directories',      d:'inurl:backup OR inurl:old_site OR inurl:archive'},
     {l:'Date-stamped backups',           d:'intext:backup_202 OR inurl:backup_202'},
   ]},
-  { type:'sec', cat:'Supply Chain & Compliance', icon:'fa-link', color:'#a5f3fc', items:[
+  { type:'sec', cat:'Supply Chain & Compliance', icon:'fa-link', color:'#818cf8', items:[
     {l:'Pentest reports',                d:'filetype:pdf intext:"penetration test report"'},
     {l:'SOC 2 docs',                     d:'intext:"SOC 2" filetype:pdf'},
     {l:'ISO 27001 documents',            d:'intext:"ISO 27001" filetype:pdf'},
@@ -147,14 +147,14 @@ const DORKS = [
     {l:'Dependency manifests',           d:'filename:requirements.txt OR filename:pom.xml OR filename:package.json'},
     {l:'Vendor/supplier portals',        d:'inurl:vendor OR inurl:supplier inurl:portal'},
   ]},
-  { type:'sec', cat:'Email & Contact Footprint', icon:'fa-at', color:'#f472b6', items:[
+  { type:'sec', cat:'Email & Contact Footprint', icon:'fa-at', color:'#818cf8', items:[
     {l:'Security contact addresses',     d:'intext:"security@"'},
     {l:'PGP public key blocks',          d:'intext:"BEGIN PGP PUBLIC KEY BLOCK"'},
     {l:'Phone number references',        d:'intext:"+1" OR intext:"+44" OR intext:"+91"'},
     {l:'Help desk portals',              d:'intitle:"Help Center" OR intitle:"Support Portal"'},
     {l:'HR/employee directories',        d:'filetype:xls intext:employee directory'},
   ]},
-  { type:'sec', cat:'People & Org OSINT', icon:'fa-users', color:'#c4b5fd', items:[
+  { type:'sec', cat:'People & Org OSINT', icon:'fa-users', color:'#818cf8', items:[
     {l:'Org chart files',                d:'filetype:pdf intext:"organizational chart"'},
     {l:'Job postings (tech clues)',       d:'inurl:careers OR inurl:jobs intext:"we use"'},
     {l:'LinkedIn company profiles',      d:'site:linkedin.com/company'},
@@ -168,7 +168,7 @@ const DORKS = [
     {l:'Stolen data sale posts',         d:'intext:"selling database" OR intext:"buy database"'},
     {l:'Victim disclosure pages',        d:'intext:"public disclosure" breach'},
   ]},
-  { type:'sec', cat:'CI/CD & Dev Tools', icon:'fa-code-branch', color:'#6ee7b7', items:[
+  { type:'sec', cat:'CI/CD & Dev Tools', icon:'fa-code-branch', color:'#34d399', items:[
     {l:'GitHub Actions workflows',       d:'site:github.com filename:.github/workflows'},
     {l:'Travis CI configs',              d:'filename:.travis.yml'},
     {l:'CircleCI configs',               d:'filename:.circleci/config.yml'},
@@ -178,7 +178,7 @@ const DORKS = [
   ]},
 
   // ── FILE HUNTER ──────────────────────────────────────
-  { type:'media', cat:'General File Finder', icon:'fa-folder-open', color:'#a78bfa', items:[
+  { type:'media', cat:'General File Finder', icon:'fa-folder-open', color:'#f472b6', items:[
     {l:'Open directory indexes',         d:'intitle:"index of"'},
     {l:'PDF documents',                  d:'filetype:pdf'},
     {l:'Word documents',                 d:'filetype:doc OR filetype:docx'},
@@ -195,7 +195,7 @@ const DORKS = [
     {l:'Recent releases (2024-2026)',    d:'intitle:"index of" mp4 (2024|2025|2026) -html'},
     {l:'MP3 audio files',               d:'intitle:"index of" mp3 -html'},
   ]},
-  { type:'media', cat:'Academic Research', icon:'fa-graduation-cap', color:'#34d399', items:[
+  { type:'media', cat:'Academic Research', icon:'fa-graduation-cap', color:'#818cf8', items:[
     {l:'Scholarly PDFs',                 d:'filetype:pdf (abstract OR references OR doi)'},
     {l:'Thesis/dissertation docs',       d:'filetype:pdf (thesis OR dissertation)'},
     {l:'Lecture notes',                  d:'filetype:pdf "lecture notes"'},
@@ -203,7 +203,7 @@ const DORKS = [
     {l:'University repositories',        d:'site:.edu inurl:repository OR inurl:publications'},
     {l:'Research datasets',              d:'filetype:csv OR filetype:xlsx "dataset"'},
   ]},
-  { type:'media', cat:'Public Records', icon:'fa-landmark', color:'#fbbf24', items:[
+  { type:'media', cat:'Public Records', icon:'fa-landmark', color:'#818cf8', items:[
     {l:'Government PDFs',                d:'site:.gov filetype:pdf'},
     {l:'Procurement/RFP documents',      d:'filetype:pdf "request for proposal"'},
     {l:'Annual budget reports',          d:'filetype:pdf "annual budget"'},
@@ -211,7 +211,7 @@ const DORKS = [
     {l:'Regulation documents',           d:'filetype:pdf regulation'},
     {l:'Environmental impact studies',   d:'filetype:pdf "environmental impact assessment"'},
   ]},
-  { type:'media', cat:'People Search', icon:'fa-id-card', color:'#60a5fa', items:[
+  { type:'media', cat:'People Search', icon:'fa-id-card', color:'#818cf8', items:[
     {l:'LinkedIn profiles',              d:'site:linkedin.com/in'},
     {l:'Personal portfolio pages',       d:'inurl:about-me OR inurl:portfolio'},
     {l:'Conference speaker bios',        d:'intext:"bio" intext:"speaker"'},
@@ -219,7 +219,7 @@ const DORKS = [
     {l:'Contact pages',                  d:'inurl:contact OR inurl:about'},
     {l:'Resume/CV PDFs',                 d:'filetype:pdf (resume OR "curriculum vitae")'},
   ]},
-  { type:'media', cat:'Social Media Discovery', icon:'fa-hashtag', color:'#fb923c', items:[
+  { type:'media', cat:'Social Media Discovery', icon:'fa-hashtag', color:'#818cf8', items:[
     {l:'X / Twitter profiles',           d:'site:x.com OR site:twitter.com'},
     {l:'Instagram profiles',             d:'site:instagram.com'},
     {l:'YouTube channels',               d:'site:youtube.com/channel OR site:youtube.com/@'},
@@ -227,7 +227,7 @@ const DORKS = [
     {l:'TikTok profiles',               d:'site:tiktok.com/@'},
     {l:'GitHub profiles',               d:'site:github.com'},
   ]},
-  { type:'media', cat:'Company Intelligence', icon:'fa-building', color:'#c084fc', items:[
+  { type:'media', cat:'Company Intelligence', icon:'fa-building', color:'#818cf8', items:[
     {l:'Annual reports',                 d:'filetype:pdf "annual report"'},
     {l:'Investor presentations',         d:'filetype:ppt OR filetype:pdf "investor presentation"'},
     {l:'Employee handbooks',             d:'filetype:pdf "employee handbook"'},
@@ -235,7 +235,7 @@ const DORKS = [
     {l:'Vendor/supplier lists',          d:'filetype:xls "vendor"'},
     {l:'Code of conduct/compliance',     d:'filetype:pdf "code of conduct"'},
   ]},
-  { type:'media', cat:'Legal & Policy Docs', icon:'fa-balance-scale', color:'#86efac', items:[
+  { type:'media', cat:'Legal & Policy Docs', icon:'fa-balance-scale', color:'#818cf8', items:[
     {l:'Terms and conditions',           d:'inurl:terms OR inurl:tos'},
     {l:'Privacy policies',               d:'inurl:privacy-policy'},
     {l:'Licensing agreements',           d:'filetype:pdf license agreement'},
@@ -243,7 +243,7 @@ const DORKS = [
     {l:'Contract templates',             d:'filetype:doc OR filetype:pdf contract template'},
     {l:'Regulatory guidance docs',       d:'filetype:pdf "regulatory guidance"'},
   ]},
-  { type:'media', cat:'Finance & Procurement', icon:'fa-chart-line', color:'#fde68a', items:[
+  { type:'media', cat:'Finance & Procurement', icon:'fa-chart-line', color:'#818cf8', items:[
     {l:'Financial statements',           d:'filetype:pdf "financial statement"'},
     {l:'Tender documents',               d:'filetype:pdf tender'},
     {l:'Invoice templates',              d:'filetype:xls invoice template'},
@@ -251,7 +251,7 @@ const DORKS = [
     {l:'Tax guides',                     d:'filetype:pdf tax guide'},
     {l:'Procurement policies',           d:'filetype:pdf procurement policy'},
   ]},
-  { type:'media', cat:'Open Data Portals', icon:'fa-table', color:'#67e8f9', items:[
+  { type:'media', cat:'Open Data Portals', icon:'fa-table', color:'#818cf8', items:[
     {l:'CSV datasets',                   d:'filetype:csv dataset'},
     {l:'JSON datasets',                  d:'filetype:json dataset'},
     {l:'Data catalog pages',             d:'inurl:data-catalog'},
@@ -259,7 +259,7 @@ const DORKS = [
     {l:'GeoJSON/KML map data',           d:'filetype:geojson OR filetype:kml'},
     {l:'Data dictionaries',              d:'filetype:pdf "data dictionary"'},
   ]},
-  { type:'media', cat:'Code & Open Source', icon:'fa-laptop-code', color:'#a5f3fc', items:[
+  { type:'media', cat:'Code & Open Source', icon:'fa-laptop-code', color:'#34d399', items:[
     {l:'GitHub repositories',            d:'site:github.com'},
     {l:'GitLab projects',               d:'site:gitlab.com'},
     {l:'Public gists',                   d:'site:gist.github.com'},
@@ -274,7 +274,7 @@ const DORKS = [
     {l:'Security awareness slides',      d:'filetype:ppt "security awareness"'},
     {l:'Bug bounty reports',             d:'intext:"bug bounty" report filetype:pdf'},
   ]},
-  { type:'media', cat:'Maps & Geospatial', icon:'fa-map', color:'#c4b5fd', items:[
+  { type:'media', cat:'Maps & Geospatial', icon:'fa-map', color:'#818cf8', items:[
     {l:'Open map datasets',              d:'filetype:geojson OR filetype:kml'},
     {l:'GIS documents',                  d:'filetype:pdf "GIS"'},
     {l:'Transportation maps',            d:'filetype:pdf "route map"'},
@@ -333,12 +333,15 @@ document.addEventListener('DOMContentLoaded', function() {
   updateFavCount();
   previewQuery();
 
-  // Engine buttons
+  // Engine buttons (may exist in more than one panel — keep them in sync)
   document.querySelectorAll('.engine-btn').forEach(function(b) {
     b.addEventListener('click', function() {
-      document.querySelectorAll('.engine-btn').forEach(function(x) { x.classList.remove('active'); });
-      b.classList.add('active');
       ST.engine = b.dataset.engine;
+      document.querySelectorAll('.engine-btn').forEach(function(x) {
+        x.classList.toggle('active', x.dataset.engine === ST.engine);
+      });
+      var label = document.getElementById('constructor-engine');
+      if (label) label.textContent = ST.engine.charAt(0).toUpperCase() + ST.engine.slice(1);
     });
   });
 
@@ -946,7 +949,7 @@ function addDorkCategory(category) {
 
 // Add requested categories and guarantee every dork has a useful explanation.
 function enrichDorks(){
-  addDorkCategory({ type:'sec', cat:'Paste Sites & Leak Sources', pack:'Secrets', icon:'fa-file-alt', color:'#f97316', items:[
+  addDorkCategory({ type:'sec', cat:'Paste Sites & Leak Sources', pack:'Secrets', icon:'fa-file-alt', color:'#ffc94d', items:[
     {l:'Pastebin target mentions', d:'site:pastebin.com "$TARGET" OR site:pastebin.com password', why:'Searches Pastebin for target references and likely credential exposure.'},
     {l:'Paste.ee credential hints', d:'site:paste.ee "$TARGET" ("password" OR "token" OR "api_key")', why:'Checks another common paste service for secrets linked to the target.'},
     {l:'GitHub gists with secrets', d:'site:gist.github.com "$TARGET" ("secret" OR "client_secret" OR "AKIA")', why:'Public gists are frequently used for quick snippets and can accidentally hold production secrets.'},
@@ -954,7 +957,7 @@ function enrichDorks(){
     {l:'Credential combo mentions', d:'"$TARGET" ("username" "password") OR ("email" "password")', why:'Looks for pages where target identifiers appear near credential pairs.'},
     {l:'Database dump references', d:'"$TARGET" ("database dump" OR "db dump" OR "leaked database")', why:'Flags potential breach chatter or public dump references for incident triage.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'CMS Fingerprinting', pack:'Recon', icon:'fa-search', color:'#60a5fa', items:[
+  addDorkCategory({ type:'sec', cat:'CMS Fingerprinting', pack:'Recon', icon:'fa-search', color:'#34d399', items:[
     {l:'WordPress assets', d:'inurl:wp-content OR inurl:wp-includes', why:'Identifies WordPress installs and exposed theme or plugin paths.'},
     {l:'WordPress plugin inventory', d:'inurl:wp-content/plugins filetype:js OR filetype:css', why:'Plugin names help analysts check vulnerable versions and unnecessary exposure.'},
     {l:'Joomla markers', d:'inurl:/administrator intitle:Joomla OR intext:"content=\\"Joomla!\\""', why:'Finds Joomla administration and metadata indicators for platform-specific review.'},
@@ -962,7 +965,7 @@ function enrichDorks(){
     {l:'Magento storefront clues', d:'inurl:/skin/frontend OR inurl:/static/frontend intext:Magento', why:'Fingerprints Magento assets that may indicate e-commerce attack surface.'},
     {l:'Shopify/WooCommerce clues', d:'intext:"woocommerce" OR intext:"cdn.shopify.com"', why:'Identifies commerce CMS technology for payment, plugin, and supply-chain review.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'OAuth & SSO Misconfig', pack:'Auth', icon:'fa-key', color:'#7c3aed', items:[
+  addDorkCategory({ type:'sec', cat:'OAuth & SSO Misconfig', pack:'Auth', icon:'fa-key', color:'#a78bfa', items:[
     {l:'OAuth redirect parameters', d:'inurl:redirect_uri= OR inurl:callback=', why:'Redirect parameters are high-value checks for OAuth redirect allowlist mistakes.'},
     {l:'OpenID configuration', d:'inurl:.well-known/openid-configuration', why:'Discovery documents reveal issuers, endpoints, supported flows, and token behavior.'},
     {l:'SAML metadata files', d:'filetype:xml intext:"EntityDescriptor" intext:"SingleSignOnService"', why:'SAML metadata can expose identity provider details and integration endpoints.'},
@@ -970,7 +973,7 @@ function enrichDorks(){
     {l:'Client ID exposure', d:'intext:"client_id" intext:"redirect_uri"', why:'Client IDs and redirect URIs help verify whether public auth integrations are expected.'},
     {l:'Auth debug errors', d:'intext:"invalid_redirect_uri" OR intext:"invalid client" OR intext:"SAMLResponse"', why:'Authentication error pages can reveal integration names, flows, and misconfiguration clues.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'GitHub Code Search', pack:'Code', icon:'fa-code', color:'#94a3b8', items:[
+  addDorkCategory({ type:'sec', cat:'GitHub Code Search', pack:'Code', icon:'fa-code', color:'#34d399', items:[
     {l:'Target mentions in GitHub', d:'site:github.com "$TARGET"', why:'Finds repositories, issues, and snippets that mention the target domain or brand.'},
     {l:'Environment files in repos', d:'site:github.com filename:.env "$TARGET"', why:'Looks for accidentally committed environment files tied to the target.'},
     {l:'API keys in public code', d:'site:github.com "$TARGET" ("api_key" OR "API_KEY" OR "client_secret")', why:'Checks public source for common secret variable names near target identifiers.'},
@@ -978,7 +981,7 @@ function enrichDorks(){
     {l:'CI secrets and workflows', d:'site:github.com "$TARGET" (filename:.github/workflows OR filename:.gitlab-ci.yml)', why:'CI configuration can disclose deployment flow, secret names, and third-party integrations.'},
     {l:'Internal hostnames in code', d:'site:github.com "$TARGET" ("internal" OR "staging" OR "dev.")', why:'Finds environment names and hostnames that may expand the recon scope.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Shodan-style Service Finds', pack:'Infrastructure', icon:'fa-network-wired', color:'#06b6d4', items:[
+  addDorkCategory({ type:'sec', cat:'Shodan-style Service Finds', pack:'Infrastructure', icon:'fa-network-wired', color:'#22d3ee', items:[
     {l:'Apache/Nginx banners', d:'intitle:"Apache2 Ubuntu Default Page" OR intitle:"Welcome to nginx"', why:'Searches indexed default pages and banners that indicate exposed web services.'},
     {l:'OpenSSH and server banners', d:'intext:"OpenSSH" OR intext:"SSH-2.0" OR intext:"Apache/"', why:'Banner text can reveal internet-facing services and software families.'},
     {l:'Exposed dashboards', d:'intitle:Grafana OR intitle:Kibana OR intitle:Prometheus', why:'Dashboard titles often indicate sensitive monitoring systems exposed to search engines.'},
@@ -986,7 +989,7 @@ function enrichDorks(){
     {l:'Camera and NVR portals', d:'intitle:"IP Camera" OR intitle:"Hikvision" OR intitle:"DVR Login"', why:'Finds indexed device portals that require asset ownership validation and access review.'},
     {l:'Network appliance logins', d:'intitle:"pfSense" OR intitle:"Fortinet" OR intitle:"SonicWall"', why:'Identifies security appliances that should not be publicly indexed unless intentionally exposed.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Subdomain & Host Discovery', pack:'Recon', icon:'fa-network-wired', color:'#38bdf8', items:[
+  addDorkCategory({ type:'sec', cat:'Subdomain & Host Discovery', pack:'Recon', icon:'fa-network-wired', color:'#22d3ee', items:[
     {l:'Wildcard subdomain sweep', d:'site:*.$TARGET', why:'Broadly enumerates indexed subdomains and hostnames associated with the target.'},
     {l:'Development hostnames', d:'intext:"dev.$TARGET" OR intext:"staging.$TARGET" OR intext:"test.$TARGET"', why:'Finds environment hostnames mentioned in indexed pages, docs, and code.'},
     {l:'API host references', d:'intext:"api.$TARGET" OR intext:"graphql.$TARGET" OR intext:"rest.$TARGET"', why:'Maps API-oriented hosts that may not be linked from the public site.'},
@@ -994,7 +997,7 @@ function enrichDorks(){
     {l:'CDN and asset hosts', d:'intext:"cdn.$TARGET" OR intext:"static.$TARGET" OR intext:"assets.$TARGET"', why:'Identifies asset hosts that can leak build artifacts, old files, or storage patterns.'},
     {l:'Certificate transparency echoes', d:'"$TARGET" "crt.sh" OR "$TARGET" "Subject Alternative Name"', why:'Finds indexed certificate references that can reveal additional hosts.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Sensitive URL Parameters', pack:'Recon', icon:'fa-search', color:'#f59e0b', items:[
+  addDorkCategory({ type:'sec', cat:'Sensitive URL Parameters', pack:'Recon', icon:'fa-search', color:'#ef4444', items:[
     {l:'Token parameters', d:'inurl:token= OR inurl:access_token= OR inurl:auth_token=', why:'Finds indexed URLs that may expose bearer-style values or password reset artifacts.'},
     {l:'API key parameters', d:'inurl:apikey= OR inurl:api_key= OR inurl:key=', why:'Looks for API keys passed through URLs where they can land in logs and search indexes.'},
     {l:'Session parameters', d:'inurl:session= OR inurl:sid= OR inurl:phpsessid=', why:'Highlights URLs that may expose session identifiers or legacy session handling.'},
@@ -1002,7 +1005,7 @@ function enrichDorks(){
     {l:'Redirect and return parameters', d:'inurl:redirect= OR inurl:return= OR inurl:next= OR inurl:continue=', why:'Flags redirect parameters that are useful for open redirect and auth-flow review.'},
     {l:'File and path parameters', d:'inurl:file= OR inurl:path= OR inurl:download= OR inurl:document=', why:'Locates file-handling parameters that may expand testing around downloads and path handling.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'API Keys by Provider', pack:'Secrets', icon:'fa-key', color:'#fbbf24', items:[
+  addDorkCategory({ type:'sec', cat:'API Keys by Provider', pack:'Secrets', icon:'fa-key', color:'#ffc94d', items:[
     {l:'Google API keys', d:'intext:"AIza" ("maps.googleapis.com" OR "googleapis.com" OR "firebase")', why:'Finds Google API key patterns that should be checked for restrictions and quota risk.'},
     {l:'Firebase config blocks', d:'intext:"apiKey" intext:"authDomain" intext:"firebaseapp.com"', why:'Firebase client config is expected in some apps but useful for identifying exposed projects and rules risk.'},
     {l:'Stripe publishable/live keys', d:'intext:"pk_live_" OR intext:"sk_live_" OR intext:"stripe_secret"', why:'Surfaces Stripe key material and distinguishes public keys from high-risk secret keys.'},
@@ -1018,7 +1021,7 @@ function enrichDorks(){
     {l:'Heroku apps', d:'site:herokuapp.com "$TARGET" OR inurl:herokuapp.com "$TARGET"', why:'Discovers Heroku-hosted apps and forgotten environments linked to the target.'},
     {l:'AWS Cognito clues', d:'intext:"cognito-idp" OR intext:"amazoncognito.com" OR intext:"userPoolId"', why:'Finds Cognito identity configuration and hosted auth references for review.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Dev QA & Staging Discovery', pack:'Recon', icon:'fa-code-branch', color:'#a78bfa', items:[
+  addDorkCategory({ type:'sec', cat:'Dev QA & Staging Discovery', pack:'Recon', icon:'fa-code-branch', color:'#34d399', items:[
     {l:'Dev URL paths', d:'inurl:dev OR inurl:development OR intitle:"dev"', why:'Finds development paths and titles that may expose weaker controls or debug data.'},
     {l:'Test and QA paths', d:'inurl:test OR inurl:qa OR intitle:"QA"', why:'Surfaces QA and test environments commonly missed in production hardening.'},
     {l:'UAT and pre-prod paths', d:'inurl:uat OR inurl:preprod OR inurl:pre-production', why:'Maps acceptance and pre-production systems that often mirror production data.'},
@@ -1034,7 +1037,7 @@ function enrichDorks(){
     {l:'Rails markers', d:'intext:"Ruby on Rails" OR intext:"csrf-param" OR intext:"csrf-token"', why:'Fingerprints Rails apps through default text and CSRF metadata.'},
     {l:'Spring Boot markers', d:'inurl:/actuator OR intitle:"Whitelabel Error Page" OR intext:"Spring Boot"', why:'Finds Spring Boot apps and actuator-style operational endpoints.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Exposed Build Artifacts', pack:'Code', icon:'fa-file-code', color:'#22d3ee', items:[
+  addDorkCategory({ type:'sec', cat:'Exposed Build Artifacts', pack:'Code', icon:'fa-file-code', color:'#34d399', items:[
     {l:'JavaScript source maps', d:'filetype:map inurl:app OR filetype:map inurl:bundle OR filetype:map inurl:main', why:'Source maps can expose original source code, routes, comments, and secrets.'},
     {l:'Webpack artifacts', d:'intext:"webpackJsonp" OR intext:"webpackChunk" OR inurl:webpack', why:'Webpack markers help identify build structure and discover bundled assets.'},
     {l:'Vite artifacts', d:'inurl:/assets/ intext:"vite" OR intext:"/@vite/client"', why:'Finds Vite builds and dev-server traces that may expose module paths.'},
@@ -1042,7 +1045,7 @@ function enrichDorks(){
     {l:'Composer lockfiles', d:'filename:composer.lock OR filename:composer.json', why:'PHP dependency files reveal packages, versions, and application framework clues.'},
     {l:'Build manifests', d:'filename:asset-manifest.json OR filename:manifest.json intext:"main.js"', why:'Build manifests can enumerate frontend assets and hidden routes.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Error & Stack Trace Hunting', pack:'Error Leaks', icon:'fa-bug', color:'#f87171', items:[
+  addDorkCategory({ type:'sec', cat:'Error & Stack Trace Hunting', pack:'Error Leaks', icon:'fa-bug', color:'#34d399', items:[
     {l:'Java stack traces', d:'intext:"java.lang." intext:"Exception" OR intext:"at java."', why:'Java stack traces reveal classes, paths, libraries, and backend behavior.'},
     {l:'Node.js errors', d:'intext:"TypeError:" intext:"at " intext:"node_modules" OR intext:"UnhandledPromiseRejection"', why:'Node errors expose package paths, route handlers, and runtime details.'},
     {l:'Laravel debug pages', d:'intext:"Whoops" intext:"Laravel" OR intext:"APP_DEBUG"', why:'Laravel debug output can disclose environment variables and source paths.'},
@@ -1050,7 +1053,7 @@ function enrichDorks(){
     {l:'Spring whitelabel errors', d:'intitle:"Whitelabel Error Page" OR intext:"There was an unexpected error"', why:'Spring Boot default error pages help fingerprint apps and exposed routes.'},
     {l:'PHP fatal errors', d:'intext:"Fatal error" intext:"on line" OR intext:"Warning: include"', why:'PHP warnings expose filesystem paths, include behavior, and vulnerable code paths.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Open Directory Deep Cuts', pack:'Files', icon:'fa-folder-open', color:'#f9a8d4', items:[
+  addDorkCategory({ type:'sec', cat:'Open Directory Deep Cuts', pack:'Files', icon:'fa-folder-open', color:'#f472b6', items:[
     {l:'Backup directories', d:'intitle:"index of" (backup OR backups OR bak OR archive)', why:'Finds browsable directories containing backups and archives.'},
     {l:'Database dumps in indexes', d:'intitle:"index of" (sql OR dump OR db OR sqlite)', why:'Locates directory listings that may expose database exports.'},
     {l:'Screenshot folders', d:'intitle:"index of" (screenshots OR captures OR screen) (png OR jpg)', why:'Screenshots can leak internal dashboards, customer data, and workflows.'},
@@ -1058,7 +1061,7 @@ function enrichDorks(){
     {l:'Private folders', d:'intitle:"index of" (private OR confidential OR internal)', why:'Flags directories whose names suggest restricted internal content.'},
     {l:'Log directories', d:'intitle:"index of" (logs OR logfiles) (log OR txt)', why:'Exposed logs can reveal errors, tokens, IPs, emails, and application paths.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Authentication Surface', pack:'Auth', icon:'fa-user-shield', color:'#10b981', items:[
+  addDorkCategory({ type:'sec', cat:'Authentication Surface', pack:'Auth', icon:'fa-user-shield', color:'#a78bfa', items:[
     {l:'Password reset pages', d:'inurl:reset-password OR inurl:forgot-password OR intitle:"reset password"', why:'Maps password recovery flows for review of token handling and account enumeration.'},
     {l:'Magic link flows', d:'inurl:magic-link OR intext:"magic link" OR inurl:passwordless', why:'Finds passwordless authentication flows and tokenized login surfaces.'},
     {l:'SSO callbacks', d:'inurl:callback OR inurl:sso/callback OR inurl:oauth/callback', why:'Identifies callback endpoints involved in identity and OAuth flows.'},
@@ -1066,7 +1069,7 @@ function enrichDorks(){
     {l:'Registration pages', d:'inurl:register OR inurl:signup OR intitle:"sign up"', why:'Finds account creation surfaces for access policy and abuse review.'},
     {l:'MFA and recovery pages', d:'inurl:mfa OR inurl:2fa OR inurl:recovery-code', why:'Maps secondary authentication and recovery surfaces that protect account access.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Takeover Candidates', pack:'Infrastructure', icon:'fa-link', color:'#fb923c', items:[
+  addDorkCategory({ type:'sec', cat:'Takeover Candidates', pack:'Infrastructure', icon:'fa-link', color:'#a78bfa', items:[
     {l:'GitHub Pages takeover clues', d:'site:github.io "$TARGET" ("There isn\'t a GitHub Pages site here" OR "404")', why:'Looks for GitHub Pages references that may indicate dangling custom domains.'},
     {l:'S3 missing bucket clues', d:'site:s3.amazonaws.com "$TARGET" ("NoSuchBucket" OR "The specified bucket does not exist")', why:'Finds S3 bucket error pages that can indicate dangling storage references.'},
     {l:'Azure website errors', d:'site:azurewebsites.net "$TARGET" ("404 Web Site not found" OR "This web app is stopped")', why:'Checks Azure-hosted app references for stale or unclaimed resources.'},
@@ -1074,7 +1077,7 @@ function enrichDorks(){
     {l:'Netlify not found clues', d:'site:netlify.app "$TARGET" ("Not Found" OR "Page Not Found")', why:'Searches for Netlify-hosted references that may indicate stale deployments.'},
     {l:'Dangling CNAME mentions', d:'"$TARGET" ("CNAME" "github.io" OR "CNAME" "herokuapp.com" OR "CNAME" "azurewebsites.net")', why:'Finds indexed DNS documentation or records that mention third-party hosting targets.'}
   ]});
-  addDorkCategory({ type:'sec', cat:'Code & Config Files', pack:'Code', icon:'fa-file-code', color:'#a5f3fc', items:[
+  addDorkCategory({ type:'sec', cat:'Code & Config Files', pack:'Code', icon:'fa-file-code', color:'#34d399', items:[
     {l:'Environment files', d:'filename:.env OR filename:.env.local OR filename:.env.production', why:'Environment files commonly contain secrets, database URLs, and service credentials.'},
     {l:'NPM credentials', d:'filename:.npmrc intext:_authToken OR intext:"//registry.npmjs.org/:_authToken"', why:'Finds NPM tokens and package registry credentials accidentally exposed.'},
     {l:'Python package credentials', d:'filename:.pypirc OR intext:"pypi-token" OR intext:"TWINE_PASSWORD"', why:'Searches for Python publishing credentials and repository config leaks.'},
@@ -1082,7 +1085,7 @@ function enrichDorks(){
     {l:'Kubernetes configs', d:'filename:config intext:"clusters:" intext:"contexts:" intext:"users:"', why:'Kubeconfig files can expose cluster endpoints and authentication material.'},
     {l:'Terraform files', d:'filename:terraform.tfvars OR filename:terraform.tfstate OR filetype:tf intext:"provider"', why:'Terraform files reveal cloud resources, variables, state, and sometimes secrets.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Credential & Secret Files', pack:'Secrets', icon:'fa-key', color:'#f59e0b', items:[
+  addDorkCategory({ type:'media', cat:'Credential & Secret Files', pack:'Secrets', icon:'fa-key', color:'#ffc94d', items:[
     {l:'Environment secret files', d:'filename:.env OR filename:.env.local OR filename:.env.production', why:'Finds environment files that often hold database URLs, API keys, and service secrets.'},
     {l:'Registry credential files', d:'filename:.npmrc OR filename:.pypirc OR filename:.dockercfg', why:'Locates package and container registry credential files that may expose publish tokens.'},
     {l:'Private key files', d:'filetype:pem OR filetype:key OR filename:id_rsa OR filename:id_dsa', why:'Searches for private-key material that should never be publicly indexed.'},
@@ -1090,7 +1093,7 @@ function enrichDorks(){
     {l:'Token-bearing JSON files', d:'filetype:json intext:"token" OR intext:"client_secret" OR intext:"private_key"', why:'Targets JSON files that may contain OAuth, service-account, or API token data.'},
     {l:'Credential text files', d:'filetype:txt (password OR passwd OR credentials OR secret)', why:'Checks text files and notes for obvious credential labels.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Backup File Hunter', pack:'Archives', icon:'fa-archive', color:'#f97316', items:[
+  addDorkCategory({ type:'media', cat:'Backup File Hunter', pack:'Archives', icon:'fa-archive', color:'#f472b6', items:[
     {l:'Backup extensions', d:'filetype:bak OR filetype:backup OR filetype:old OR filetype:orig', why:'Finds common backup copy extensions that can leak source or sensitive documents.'},
     {l:'Compressed backups', d:'filetype:zip OR filetype:rar OR filetype:7z OR filetype:tar.gz', why:'Locates compressed archives that may contain full sites, configs, or database exports.'},
     {l:'Date-stamped archives', d:'backup_2024 OR backup_2025 OR backup_2026 OR inurl:backup-', why:'Searches naming patterns often used for scheduled backup artifacts.'},
@@ -1098,7 +1101,7 @@ function enrichDorks(){
     {l:'Old site copies', d:'inurl:old OR inurl:old_site OR inurl:archive filetype:zip', why:'Finds retired or archived site copies that may still be indexed.'},
     {l:'Editor temp files', d:'filetype:swp OR filetype:tmp OR filetype:save OR filetype:orig', why:'Locates temporary editor files that can reveal source or credentials.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Database File Hunter', pack:'Data', icon:'fa-database', color:'#10b981', items:[
+  addDorkCategory({ type:'media', cat:'Database File Hunter', pack:'Data', icon:'fa-database', color:'#f472b6', items:[
     {l:'SQL dump files', d:'filetype:sql intext:"CREATE TABLE" OR intext:"INSERT INTO"', why:'Finds SQL dumps that may contain full database schema and records.'},
     {l:'SQLite and DB files', d:'filetype:sqlite OR filetype:sqlite3 OR filetype:db', why:'Locates embedded database files commonly used by apps and tools.'},
     {l:'Database backup files', d:'filetype:dump OR filetype:bak intext:"database"', why:'Searches for database-specific backup and dump artifacts.'},
@@ -1106,7 +1109,7 @@ function enrichDorks(){
     {l:'phpMyAdmin exports', d:'filetype:sql intext:"phpMyAdmin SQL Dump"', why:'Targets recognizable phpMyAdmin export headers.'},
     {l:'Mongo/JSON exports', d:'filetype:json intext:"_id" intext:"ObjectId" OR intext:"$date"', why:'Finds JSON database exports with MongoDB-style fields.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Source Code Files', pack:'Code', icon:'fa-laptop-code', color:'#a5f3fc', items:[
+  addDorkCategory({ type:'media', cat:'Source Code Files', pack:'Code', icon:'fa-laptop-code', color:'#34d399', items:[
     {l:'PHP source files', d:'filetype:php intext:"<?php" OR inurl:.php~', why:'Finds indexed PHP source and backup variants that may expose application logic.'},
     {l:'Python source files', d:'filetype:py intext:"import" OR intext:"def "', why:'Locates Python source files and scripts exposed to search indexes.'},
     {l:'JavaScript and TypeScript', d:'filetype:js OR filetype:ts intext:"api" OR intext:"token"', why:'Searches frontend and Node files for endpoints, tokens, and implementation clues.'},
@@ -1114,7 +1117,7 @@ function enrichDorks(){
     {l:'Project manifests', d:'filename:package.json OR filename:composer.json OR filename:pom.xml OR filename:requirements.txt', why:'Manifests reveal dependencies, framework choices, scripts, and package versions.'},
     {l:'Source maps', d:'filetype:map inurl:bundle OR inurl:app OR inurl:main', why:'Source maps can reconstruct original frontend source and route structure.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Config & Infrastructure Files', pack:'Infrastructure', icon:'fa-server', color:'#67e8f9', items:[
+  addDorkCategory({ type:'media', cat:'Config & Infrastructure Files', pack:'Infrastructure', icon:'fa-server', color:'#22d3ee', items:[
     {l:'Docker compose files', d:'filename:docker-compose.yml OR filename:docker-compose.yaml', why:'Docker Compose files reveal services, ports, images, volumes, and environment names.'},
     {l:'Kubernetes config files', d:'filename:config intext:"clusters:" intext:"contexts:" intext:"users:"', why:'Kubeconfig files expose cluster endpoints and auth configuration.'},
     {l:'Terraform state and vars', d:'filename:terraform.tfstate OR filename:terraform.tfvars OR filetype:tfvars', why:'Terraform files can reveal cloud inventory, variables, and secret values.'},
@@ -1122,7 +1125,7 @@ function enrichDorks(){
     {l:'Nginx configs', d:'filetype:conf intext:"server_name" intext:"nginx"', why:'Nginx configs show virtual hosts, upstreams, paths, and proxy rules.'},
     {l:'Apache configs', d:'filetype:conf intext:"VirtualHost" OR filename:.htaccess', why:'Apache configs reveal redirects, auth rules, exposed directories, and app paths.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Document Classification', pack:'Documents', icon:'fa-file-alt', color:'#ef4444', items:[
+  addDorkCategory({ type:'media', cat:'Document Classification', pack:'Documents', icon:'fa-file-alt', color:'#f472b6', items:[
     {l:'Confidential documents', d:'filetype:pdf OR filetype:doc OR filetype:docx "confidential"', why:'Finds documents explicitly labeled confidential and likely intended for limited access.'},
     {l:'Internal-only files', d:'filetype:pdf OR filetype:docx ("internal use only" OR "internal only")', why:'Surfaces internal documents that may expose processes, contacts, or strategy.'},
     {l:'Restricted documents', d:'filetype:pdf OR filetype:docx ("restricted" OR "proprietary")', why:'Locates files with restricted or proprietary labels.'},
@@ -1130,7 +1133,7 @@ function enrichDorks(){
     {l:'HR and payroll docs', d:'filetype:xls OR filetype:xlsx OR filetype:pdf (payroll OR salary OR compensation OR HR)', why:'Targets HR files and spreadsheets that can expose employee-sensitive information.'},
     {l:'Security and policy docs', d:'filetype:pdf ("SOC 2" OR "ISO 27001" OR "security policy" OR "penetration test")', why:'Finds compliance and security documents useful for exposure review.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Spreadsheet Intelligence', pack:'Documents', icon:'fa-table', color:'#34d399', items:[
+  addDorkCategory({ type:'media', cat:'Spreadsheet Intelligence', pack:'Documents', icon:'fa-table', color:'#f472b6', items:[
     {l:'Employee spreadsheets', d:'filetype:xls OR filetype:xlsx OR filetype:csv ("employee" OR "staff" OR "directory")', why:'Finds staff lists and directories that may expose names, roles, and contact details.'},
     {l:'Vendor spreadsheets', d:'filetype:xls OR filetype:xlsx OR filetype:csv ("vendor" OR "supplier")', why:'Locates vendor and supplier lists that reveal third-party relationships.'},
     {l:'Asset inventories', d:'filetype:xls OR filetype:xlsx OR filetype:csv ("asset inventory" OR "hardware inventory" OR "software inventory")', why:'Finds inventories that may disclose systems, software, and ownership.'},
@@ -1138,7 +1141,7 @@ function enrichDorks(){
     {l:'Budget and procurement sheets', d:'filetype:xls OR filetype:xlsx OR filetype:csv ("budget" OR "procurement" OR "purchase order")', why:'Finds finance and procurement spreadsheets with business-sensitive data.'},
     {l:'Contact exports', d:'filetype:csv ("email" "phone" "address")', why:'Targets exported contact datasets that can expose personal information.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Presentation Hunter', pack:'Documents', icon:'fa-file-alt', color:'#c084fc', items:[
+  addDorkCategory({ type:'media', cat:'Presentation Hunter', pack:'Documents', icon:'fa-file-alt', color:'#f472b6', items:[
     {l:'Investor decks', d:'filetype:ppt OR filetype:pptx OR filetype:pdf "investor presentation"', why:'Finds investor decks that may disclose roadmap, metrics, and strategy.'},
     {l:'Roadmap decks', d:'filetype:ppt OR filetype:pptx OR filetype:pdf ("roadmap" OR "product roadmap")', why:'Locates roadmap presentations that may reveal upcoming features and timelines.'},
     {l:'Internal training decks', d:'filetype:ppt OR filetype:pptx "internal training"', why:'Finds training material that can disclose internal tools and processes.'},
@@ -1146,7 +1149,7 @@ function enrichDorks(){
     {l:'Architecture decks', d:'filetype:ppt OR filetype:pptx OR filetype:pdf ("architecture diagram" OR "system architecture")', why:'Finds technical presentations that may expose system design and data flows.'},
     {l:'Board and strategy decks', d:'filetype:ppt OR filetype:pptx OR filetype:pdf ("board deck" OR "strategy deck")', why:'Locates executive presentations with sensitive strategic context.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Image & Screenshot Hunter', pack:'Media', icon:'fa-film', color:'#fb923c', items:[
+  addDorkCategory({ type:'media', cat:'Image & Screenshot Hunter', pack:'Media', icon:'fa-film', color:'#f472b6', items:[
     {l:'Screenshot files', d:'filetype:png OR filetype:jpg ("screenshot" OR "screen shot" OR "capture")', why:'Finds screenshots that may expose dashboards, tickets, customer records, or internal tools.'},
     {l:'Dashboard captures', d:'filetype:png OR filetype:jpg ("dashboard" OR "grafana" OR "kibana")', why:'Searches images likely to show operational metrics or monitoring interfaces.'},
     {l:'Network diagrams', d:'filetype:png OR filetype:jpg OR filetype:pdf ("network diagram" OR "network topology")', why:'Finds diagrams that can reveal network layout and trust boundaries.'},
@@ -1154,7 +1157,7 @@ function enrichDorks(){
     {l:'Whiteboard photos', d:'filetype:jpg OR filetype:png ("whiteboard" OR "workshop")', why:'Whiteboard photos may leak planning notes, diagrams, and internal names.'},
     {l:'Open image directories', d:'intitle:"index of" (png OR jpg OR jpeg) (screenshot OR diagram OR dashboard)', why:'Finds browsable directories full of sensitive images or captures.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Audio & Video Training Files', pack:'Media', icon:'fa-film', color:'#818cf8', items:[
+  addDorkCategory({ type:'media', cat:'Audio & Video Training Files', pack:'Media', icon:'fa-film', color:'#f472b6', items:[
     {l:'Meeting recordings', d:'filetype:mp4 OR filetype:mkv OR filetype:mov ("meeting recording" OR "recorded meeting")', why:'Finds recorded meetings that may expose internal discussions and screenshares.'},
     {l:'Webinar recordings', d:'filetype:mp4 OR filetype:mov ("webinar" OR "recording")', why:'Locates webinar files and public recordings relevant to the target.'},
     {l:'Training videos', d:'filetype:mp4 OR filetype:mkv ("training" OR "onboarding")', why:'Finds training and onboarding media that can reveal internal systems and processes.'},
@@ -1162,7 +1165,7 @@ function enrichDorks(){
     {l:'Audio briefings', d:'filetype:mp3 OR filetype:m4a OR filetype:wav ("briefing" OR "meeting")', why:'Finds audio files that can contain meeting notes, briefings, or interviews.'},
     {l:'Open media directories', d:'intitle:"index of" (mp4 OR mov OR mp3 OR wav) (training OR meeting OR webinar)', why:'Finds directory listings containing audio and video files.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Open Directory File Types', pack:'Directories', icon:'fa-folder-open', color:'#f9a8d4', items:[
+  addDorkCategory({ type:'media', cat:'Open Directory File Types', pack:'Directories', icon:'fa-folder-open', color:'#f472b6', items:[
     {l:'Document directories', d:'intitle:"index of" (pdf OR doc OR docx OR xls OR xlsx)', why:'Finds open directories containing common office documents.'},
     {l:'Backup directories', d:'intitle:"index of" (backup OR backups OR archive OR old)', why:'Locates directories likely to hold backup files and old site copies.'},
     {l:'Private directories', d:'intitle:"index of" (private OR confidential OR internal OR restricted)', why:'Flags directory listings whose names suggest nonpublic content.'},
@@ -1170,7 +1173,7 @@ function enrichDorks(){
     {l:'Log file directories', d:'intitle:"index of" (log OR logs OR logfile)', why:'Finds open directories containing logs that may reveal tokens and errors.'},
     {l:'Archive-heavy directories', d:'intitle:"index of" (zip OR rar OR 7z OR tar OR gz)', why:'Locates browsable directories dominated by archives.'}
   ]});
-  addDorkCategory({ type:'media', cat:'Government Legal & Compliance Docs', pack:'Public Records', icon:'fa-landmark', color:'#fbbf24', items:[
+  addDorkCategory({ type:'media', cat:'Government Legal & Compliance Docs', pack:'Public Records', icon:'fa-landmark', color:'#818cf8', items:[
     {l:'Procurement documents', d:'filetype:pdf ("procurement" OR "purchase order" OR "tender")', why:'Finds procurement files that disclose vendors, services, and spending.'},
     {l:'RFP and RFI files', d:'filetype:pdf OR filetype:docx ("request for proposal" OR "request for information" OR RFP OR RFI)', why:'Locates public solicitation documents with requirements and vendor context.'},
     {l:'Court records', d:'filetype:pdf ("court" OR "case number" OR "docket")', why:'Finds legal records and filings relevant to public-record research.'},
@@ -1186,7 +1189,7 @@ function enrichDorks(){
   });
 
   /* ── GITHUB ADVANCED DORKING ─────────────────────────── */
-  addDorkCategory({ type:'sec', cat:'GitHub Advanced Dorking', pack:'Code', icon:'fa-code-branch', color:'#f0f6ff', items:[
+  addDorkCategory({ type:'sec', cat:'GitHub Advanced Dorking', pack:'Code', icon:'fa-code-branch', color:'#34d399', items:[
     {l:'path:.env secrets', d:'site:github.com path:.env "SECRET_KEY" OR "API_KEY" OR "DB_PASSWORD"', why:'Developers accidentally commit .env files with live credentials, exposing keys and database URLs.', sev:'critical'},
     {l:'language:Python API keys', d:'site:github.com language:Python "API_KEY" OR "AWS_SECRET_ACCESS_KEY" OR "DB_PASSWORD"', why:'Python config and settings files commonly hardcode secrets in variable assignments.', sev:'critical'},
     {l:'language:JavaScript secrets', d:'site:github.com language:JavaScript "apiKey" OR "client_secret" OR "access_token" -test -mock', why:'JavaScript files frequently contain hardcoded API keys and endpoint tokens.', sev:'high'},
@@ -1216,7 +1219,7 @@ function enrichDorks(){
   ]});
 
   /* ── OAUTH & SSO MISCONFIGURATIONS ───────────────────── */
-  addDorkCategory({ type:'sec', cat:'OAuth & SSO Misconfigs', pack:'Auth', icon:'fa-id-badge', color:'#818cf8', items:[
+  addDorkCategory({ type:'sec', cat:'OAuth & SSO Misconfigs', pack:'Auth', icon:'fa-id-badge', color:'#a78bfa', items:[
     {l:'Open redirect_uri params', d:'inurl:"oauth/authorize?redirect_uri=" OR inurl:"oauth2/authorize?redirect_uri="', why:'Open redirect_uri parameters can allow attackers to steal authorization codes by redirecting to attacker-controlled URLs.', sev:'high'},
     {l:'Indexed OAuth callbacks with code', d:'inurl:"/callback?code=" OR inurl:"/oauth/callback?code="', why:'Authorization codes indexed in search results are expired but indicate misconfigured token logging or redirect chains.', sev:'high'},
     {l:'Implicit flow access tokens in URL', d:'inurl:"#access_token=" OR inurl:"?access_token=" OR inurl:"token_type=bearer"', why:'Access tokens appearing in URLs get stored in browser history, server logs, and search indexes — a critical secret exposure.', sev:'critical'},
@@ -1232,7 +1235,7 @@ function enrichDorks(){
   /* ══════════════════════════════════════════════════════
      SHODAN / CENSYS INTEL CATEGORIES (type:'shodan')
   ══════════════════════════════════════════════════════ */
-  addDorkCategory({ type:'shodan', cat:'Web Server Discovery', pack:'Infrastructure', icon:'fa-server', color:'#06b6d4', items:[
+  addDorkCategory({ type:'shodan', cat:'Web Server Discovery', pack:'Infrastructure', icon:'fa-server', color:'#22d3ee', items:[
     {l:'Default nginx pages', d:'http.title:"Welcome to nginx" product:"nginx"', why:'Default nginx pages indicate recent deploys or misconfigured servers open for further enumeration.', sev:'medium'},
     {l:'Default Apache pages', d:'http.title:"Apache2 Ubuntu Default Page" product:"Apache httpd"', why:'Apache default pages confirm the web server version and that no application has been deployed.', sev:'medium'},
     {l:'IIS default pages', d:'http.title:"IIS Windows Server" product:"Microsoft IIS httpd"', why:'Default IIS pages expose the Windows and IIS versions for vulnerability matching.', sev:'medium'},
@@ -1240,7 +1243,7 @@ function enrichDorks(){
     {l:'Phishing / parked pages', d:'http.title:"Account Suspended" OR http.title:"Parking Page"', why:'Suspended or parked domains may be candidates for domain takeover or brand impersonation.', sev:'info'},
     {l:'Server version banners', d:'http.server:"Apache/2.2" OR http.server:"Apache/2.4.49"', why:'Specific version banners allow fast correlation with known CVEs for prioritized patching.', sev:'high'},
   ]});
-  addDorkCategory({ type:'shodan', cat:'Exposed Databases', pack:'Database', icon:'fa-database', color:'#10b981', items:[
+  addDorkCategory({ type:'shodan', cat:'Exposed Databases', pack:'Database', icon:'fa-database', color:'#f472b6', items:[
     {l:'Open MongoDB (no auth)', d:'product:"MongoDB" port:27017 -"SCRAM" -"x.509"', why:'MongoDB instances without authentication expose all data to any network-reachable client.', sev:'critical'},
     {l:'Open Redis', d:'product:"Redis" port:6379', why:'Unauthenticated Redis allows full data read/write and can be abused for SSRF pivoting.', sev:'critical'},
     {l:'Exposed Elasticsearch', d:'product:"Elastic" port:9200 -"security_enabled"', why:'Open Elasticsearch clusters expose all indexed data and may allow index deletion.', sev:'critical'},
@@ -1248,7 +1251,7 @@ function enrichDorks(){
     {l:'CouchDB admin interfaces', d:'product:"CouchDB" port:5984', why:'CouchDB without authentication exposes the Futon/Fauxton admin UI and all databases.', sev:'critical'},
     {l:'Exposed Cassandra', d:'product:"Cassandra" port:9042', why:'Cassandra nodes reachable from the internet allow unauthenticated data queries.', sev:'critical'},
   ]});
-  addDorkCategory({ type:'shodan', cat:'DevOps & CI/CD Exposure', pack:'DevOps', icon:'fa-code-branch', color:'#a78bfa', items:[
+  addDorkCategory({ type:'shodan', cat:'DevOps & CI/CD Exposure', pack:'DevOps', icon:'fa-code-branch', color:'#34d399', items:[
     {l:'Jenkins instances', d:'http.title:"Dashboard [Jenkins]" OR http.title:"Jenkins"', why:'Exposed Jenkins dashboards may allow unauthenticated job execution or credential theft.', sev:'high'},
     {l:'Docker Remote API', d:'port:2375 product:"Docker" -"TLS"', why:'Docker daemons listening without TLS allow full container management including exec and volume access.', sev:'critical'},
     {l:'Kubernetes API server', d:'port:6443 product:"Kubernetes" OR port:8080 "kubectl"', why:'Exposed Kubernetes API servers allow cluster enumeration and may permit privilege escalation to cluster-admin.', sev:'critical'},
@@ -1256,7 +1259,7 @@ function enrichDorks(){
     {l:'Grafana dashboards', d:'http.title:"Grafana" product:"Grafana Labs Grafana"', why:'Exposed Grafana with anonymous access leaks business metrics, infrastructure topology, and may expose datasource credentials.', sev:'high'},
     {l:'GitLab instances', d:'http.title:"GitLab" -"GitLab.com"', why:'Self-hosted GitLab exposed to the internet should be patched for multiple critical CVEs including unauthenticated RCE.', sev:'high'},
   ]});
-  addDorkCategory({ type:'shodan', cat:'IoT & Industrial Control', pack:'IoT', icon:'fa-microchip', color:'#fb923c', items:[
+  addDorkCategory({ type:'shodan', cat:'IoT & Industrial Control', pack:'IoT', icon:'fa-microchip', color:'#22d3ee', items:[
     {l:'Hikvision IP cameras', d:'product:"Hikvision IP Camera" has_screenshot:true', why:'Hikvision cameras without authentication expose live video feeds and location intelligence.', sev:'high'},
     {l:'Webcam portals', d:'http.title:"webcam" has_screenshot:true port:80', why:'Public-facing webcams can reveal sensitive physical locations, schedules, and security posture.', sev:'high'},
     {l:'Modbus SCADA systems', d:'port:502 product:"Modbus"', why:'Modbus is an industrial control protocol with no authentication — exposure can allow manipulation of physical systems.', sev:'critical'},
@@ -1264,7 +1267,7 @@ function enrichDorks(){
     {l:'Printer admin interfaces', d:'http.title:"Printer" OR http.title:"HP LaserJet" port:80', why:'Exposed printer admin pages may allow document capture, firmware modification, and network pivoting.', sev:'medium'},
     {l:'VNC no-auth servers', d:'port:5900 product:"VNC" -"password"', why:'VNC servers without password protection provide full graphical desktop control to anyone who connects.', sev:'critical'},
   ]});
-  addDorkCategory({ type:'shodan', cat:'Network Devices & VPNs', pack:'Network', icon:'fa-network-wired', color:'#38bdf8', items:[
+  addDorkCategory({ type:'shodan', cat:'Network Devices & VPNs', pack:'Network', icon:'fa-network-wired', color:'#22d3ee', items:[
     {l:'Exposed RDP (3389)', d:'port:3389 product:"Microsoft Terminal Services" os:"Windows"', why:'Public RDP is a primary brute-force and exploitation target. Exposure should be immediately restricted.', sev:'critical'},
     {l:'Fortinet SSL-VPN', d:'http.title:"FortiGate SSL VPN" OR ssl.cert.subject.cn:"FortiGate"', why:'Fortinet SSL-VPN instances may be vulnerable to critical CVEs enabling credential theft or RCE.', sev:'critical'},
     {l:'Pulse/Ivanti Secure VPN', d:'http.title:"Pulse Secure" ssl.cert.subject.cn:"pulsesecure"', why:'Pulse Secure VPNs have active CVEs allowing unauthenticated credential and session theft.', sev:'critical'},

@@ -557,10 +557,10 @@ footer {
   flex-shrink:0; line-height:1.4; text-transform:uppercase;
   transform:rotate(-1.5deg);
 }
-.sev-critical { background:transparent; color:#c14b3a; border:2px solid #c14b3a; }
-.sev-high     { background:transparent; color:#b0722a; border:2px solid #b0722a; }
-.sev-medium   { background:transparent; color:#a08a2f; border:2px solid #a08a2f; }
-.sev-info     { background:transparent; color:#5c8a6e; border:2px solid #5c8a6e; }
+.sev-critical { background:transparent; color:var(--redact); border:2px solid var(--redact); }
+.sev-high     { background:transparent; color:var(--amber); border:2px solid var(--amber); }
+.sev-medium   { background:transparent; color:var(--wire); border:2px solid var(--wire); }
+.sev-info     { background:transparent; color:var(--ink-dim); border:2px solid var(--ink-dim); }
 
 /* ── DORK LABEL ROW (label + badge in line) ── */
 .dork-label-row { display:flex; align-items:center; gap:6px; flex-wrap:wrap; margin-bottom:3px; }
@@ -605,14 +605,14 @@ footer {
   color:var(--ink-muted); transition:all 0.15s; text-transform:uppercase;
 }
 .sev-filter-btn.active { border-color:var(--ink); color:var(--ink); background:var(--paper-line); }
-.sev-filter-btn.sev-filter-critical { border-color:#c14b3a55; color:#c14b3a; }
-.sev-filter-btn.sev-filter-critical.active { border-color:#c14b3a; background:transparent; }
-.sev-filter-btn.sev-filter-high { border-color:#b0722a55; color:#b0722a; }
-.sev-filter-btn.sev-filter-high.active { border-color:#b0722a; }
-.sev-filter-btn.sev-filter-medium { border-color:#a08a2f55; color:#a08a2f; }
-.sev-filter-btn.sev-filter-medium.active { border-color:#a08a2f; }
-.sev-filter-btn.sev-filter-info { border-color:#5c8a6e55; color:#5c8a6e; }
-.sev-filter-btn.sev-filter-info.active { border-color:#5c8a6e; }
+.sev-filter-btn.sev-filter-critical { border-color:color-mix(in srgb, var(--redact) 55%, transparent); color:var(--redact); }
+.sev-filter-btn.sev-filter-critical.active { border-color:var(--redact); background:transparent; }
+.sev-filter-btn.sev-filter-high { border-color:color-mix(in srgb, var(--amber) 55%, transparent); color:var(--amber); }
+.sev-filter-btn.sev-filter-high.active { border-color:var(--amber); }
+.sev-filter-btn.sev-filter-medium { border-color:color-mix(in srgb, var(--wire) 55%, transparent); color:var(--wire); }
+.sev-filter-btn.sev-filter-medium.active { border-color:var(--wire); }
+.sev-filter-btn.sev-filter-info { border-color:color-mix(in srgb, var(--ink-dim) 55%, transparent); color:var(--ink-dim); }
+.sev-filter-btn.sev-filter-info.active { border-color:var(--ink-dim); }
 
 /* ── WARN TOAST ── */
 .toast.warn { border-color:var(--amber); }
