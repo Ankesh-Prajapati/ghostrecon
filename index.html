@@ -8,12 +8,13 @@
        PRIMARY SEO — Title & Description
   ══════════════════════════════════════════════ -->
   <title>GhostRecon — Advanced OSINT Dork Engine</title>
-  <meta name="description" content="GhostRecon is a free, browser-based OSINT Google Dorking engine for cybersecurity analysts, bug bounty hunters, and VAPT professionals. Generate advanced search dorks for credential leaks, exposed configs, CVE patterns, Shodan queries, GitHub secrets, and more — no backend required.">
-  <meta name="keywords" content="ghostrecon, ghost recon osint, google dorking tool, dork engine, osint tool, google dorks, bug bounty dorking, security dorks, advanced google search, information gathering, recon tool, cybersecurity osint, vapt tool, penetration testing recon, google hacking, shodan dorks, censys queries, github dorking, dork generator, exposed credentials finder, security research tool, web application recon, kali linux osint alternative, passive reconnaissance, attack surface discovery, ghdb dorks, google hacking database, open source intelligence, security scanner free, online osint tool">
+  <meta name="description" content="GhostRecon — free Google Dorking and OSINT tool for bug bounty hunters and VAPT pros. 400+ ready-made dorks for credential leaks, exposed configs, CVEs, admin panels, Shodan queries, GitHub secrets. No signup, no backend, no tracking.">
+  <meta name="keywords" content="google dorking, google dorking tool, google dorking for bug bounty, how to google dork, google hacking, dorking tool, osint tool, dork engine, google dorks list, shodan dorks, github dorking, censys queries, bug bounty reconnaissance, vapt tool, penetration testing recon, exposed credentials finder, admin panel discovery, github secrets scanner, cve exploit dorks, oauth misconfiguration, attack surface mapping, information gathering tool, passive recon, ghdb alternative, google hacking database, open source intelligence, security research tool, free osint tool, browser-based dorking, no backend osint">
   <meta name="author" content="GhostRecon">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="theme-color" content="#8b5cf6">
-  <link rel="canonical" href="https://ghostrecon.app/">
+  <link rel="canonical" href="https://ankesh-prajapati.github.io/ghostrecon/">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👻</text></svg>">
 
   <!-- ══════════════════════════════════════════════
        OPEN GRAPH — Social / Link Previews
@@ -22,8 +23,8 @@
   <meta property="og:site_name" content="GhostRecon">
   <meta property="og:title" content="GhostRecon — Advanced OSINT Dork Engine">
   <meta property="og:description" content="Free browser-based OSINT dorking engine. Generate advanced Google dorks for credential leaks, Shodan queries, GitHub secrets, CVE patterns, OAuth misconfigs and more. No login, no tracking, no backend.">
-  <meta property="og:url" content="https://ghostrecon.app/">
-  <meta property="og:image" content="https://ghostrecon.app/og-banner.png">
+  <meta property="og:url" content="https://ankesh-prajapati.github.io/ghostrecon/">
+  <meta property="og:image" content="https://ankesh-prajapati.github.io/ghostrecon/og-banner.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:locale" content="en_US">
@@ -34,9 +35,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="GhostRecon — Advanced OSINT Dork Engine">
   <meta name="twitter:description" content="Free browser-based OSINT dorking engine for bug bounty hunters & security researchers. Shodan, GitHub, CVE, OAuth dorks — all in one place. No backend needed.">
-  <meta name="twitter:image" content="https://ghostrecon.app/og-banner.png">
-  <meta name="twitter:site" content="@ghostrecon_app">
-  <meta name="twitter:creator" content="@ghostrecon_app">
+  <meta name="twitter:image" content="https://ankesh-prajapati.github.io/ghostrecon/og-banner.png">
 
   <!-- ══════════════════════════════════════════════
        STRUCTURED DATA — SoftwareApplication (JSON-LD)
@@ -48,7 +47,7 @@
     "name": "GhostRecon",
     "alternateName": ["GhostRecon OSINT", "Ghost Recon Dork Engine", "GhostRecon Dorking Tool"],
     "description": "GhostRecon is a free, browser-based OSINT Google Dorking engine for cybersecurity analysts, bug bounty hunters, and VAPT professionals. It generates advanced search dorks for credential leaks, exposed configs, CVE-specific patterns, Shodan and Censys queries, GitHub secrets, OAuth misconfigs, and more.",
-    "url": "https://ghostrecon.app/",
+    "url": "https://ankesh-prajapati.github.io/ghostrecon/",
     "applicationCategory": "SecurityApplication",
     "operatingSystem": "Any (Browser-based)",
     "offers": {
@@ -83,11 +82,11 @@
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "GhostRecon",
-    "url": "https://ghostrecon.app/",
+    "url": "https://ankesh-prajapati.github.io/ghostrecon/",
     "description": "Advanced OSINT Google Dorking Engine for security professionals",
     "potentialAction": {
       "@type": "SearchAction",
-      "target": "https://ghostrecon.app/?q={search_term_string}",
+      "target": "https://ankesh-prajapati.github.io/ghostrecon/?q={search_term_string}",
       "query-input": "required name=search_term_string"
     }
   }
@@ -125,8 +124,9 @@
       <div class="logo">
         <div class="logo-icon"><i class="fas fa-ghost"></i></div>
         <div class="logo-text">
-          <div class="logo-name">GHOSTRECON</div>
-          <div class="logo-sub">ADVANCED OSINT DORK ENGINE </div>
+          <h1 class="logo-name">GHOSTRECON</h1>
+          <h2 class="logo-sub">ADVANCED OSINT DORK ENGINE </h2>
+          <p class="sr-only">GhostRecon is a free Google Dorking and OSINT tool — build and run advanced Google dorks, Shodan queries, and GitHub search dorks for bug bounty hunting, VAPT, and security research, right in your browser.</p>
         </div>
       </div>
       <div class="status-pills">
@@ -410,7 +410,93 @@
       <div class="op-ref"><code>(group)</code><p>Group boolean logic with parentheses</p></div>
       <div class="op-ref"><code>define:</code><p>Show the definition of a word</p></div>
     </div>
+  <div class="panel" id="faq-section" style="margin-top:18px;">
+    <div class="panel-head"><i class="fas fa-book-open"></i> GOOGLE DORKING FAQ</div>
+    <div class="panel-body faq-grid">
+      <div class="faq-item">
+        <h3>What is Google dorking?</h3>
+        <p>Google dorking (also called <strong>Google hacking</strong>) is the practice of using advanced search operators — like <code>site:</code>, <code>filetype:</code>, and <code>inurl:</code> — to find information that isn't easily reachable through a normal search. Security researchers use dorks during OSINT and reconnaissance to surface exposed files, login pages, and misconfigured services on the public web.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is Google dorking illegal?</h3>
+        <p>No — running a search query is not illegal. Dorking only surfaces links to publicly indexed pages; it doesn't access, download, or modify anything. What you do with the results can be illegal (e.g. accessing a system without authorization), so always dork within the scope of an authorized bug bounty program, VAPT engagement, or your own assets.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What is GhostRecon?</h3>
+        <p>GhostRecon is a free, browser-based Google Dorking and OSINT engine with 400+ ready-made dork categories (credential leaks, exposed configs, CVE patterns, admin panels, and more), plus a custom dork constructor, Shodan/Censys/GitHub query builders, search history, and favorites — no signup, no backend, no data leaves your browser.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What's the difference between Google dorking and OSINT?</h3>
+        <p>Google dorking is one technique within OSINT (Open Source Intelligence). OSINT is the broader practice of gathering information from publicly available sources — dorking specifically uses search engine operators to do that against indexed web content.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Where is the Google Hacking Database (GHDB)?</h3>
+        <p>The GHDB is a well-known public archive of Google dorks maintained by Exploit-DB. GhostRecon takes a similar idea but organizes dorks into browsable categories with a live query preview, bulk launch queue, and multi-engine support (Google, Bing, DuckDuckGo, Brave, Yandex) instead of a flat list.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I use these dorks for bug bounty hunting?</h3>
+        <p>Yes — GhostRecon's dorks are built with bug bounty and VAPT recon in mind: attack surface mapping, subdomain discovery, exposed credentials, admin panel discovery, and API reconnaissance are all covered. Always stay within the target's authorized scope.</p>
+      </div>
+    </div>
+  </div><!-- /faq-section -->
   </div><!-- /page-ref -->
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is Google dorking?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Google dorking (also called Google hacking) is the practice of using advanced search operators — like site:, filetype:, and inurl: — to find information that isn't easily reachable through a normal search. Security researchers use dorks during OSINT and reconnaissance to surface exposed files, login pages, and misconfigured services on the public web."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is Google dorking illegal?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "No — running a search query is not illegal. Dorking only surfaces links to publicly indexed pages; it doesn't access, download, or modify anything. What you do with the results can be illegal, so always dork within the scope of an authorized bug bounty program, VAPT engagement, or your own assets."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What is GhostRecon?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "GhostRecon is a free, browser-based Google Dorking and OSINT engine with 400+ ready-made dork categories, plus a custom dork constructor, Shodan/Censys/GitHub query builders, search history, and favorites — no signup, no backend."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What's the difference between Google dorking and OSINT?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Google dorking is one technique within OSINT (Open Source Intelligence). OSINT is the broader practice of gathering information from publicly available sources — dorking specifically uses search engine operators to do that against indexed web content."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Where is the Google Hacking Database (GHDB)?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "The GHDB is a well-known public archive of Google dorks maintained by Exploit-DB. GhostRecon organizes dorks into browsable categories with a live query preview, bulk launch queue, and multi-engine support instead of a flat list."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Can I use these dorks for bug bounty hunting?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes — GhostRecon's dorks are built with bug bounty and VAPT recon in mind: attack surface mapping, subdomain discovery, exposed credentials, admin panel discovery, and API reconnaissance are all covered. Always stay within the target's authorized scope."
+        }
+      }
+    ]
+  }
+  </script>
 
 </div><!-- /wrap -->
 

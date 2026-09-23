@@ -1,0 +1,19 @@
+User-agent: *
+Allow: /
+Allow: /ghostrecon/
+
+# Disallow access to common paths that might expose internals (none in this case, but best practice)
+Disallow: /admin/
+Disallow: /.git/
+Disallow: /node_modules/
+
+# Sitemap location
+Sitemap: https://ankesh-prajapati.github.io/ghostrecon/sitemap.xml
+
+# Crawl delay (be respectful — GhostRecon is static, no backend stress)
+Crawl-delay: 1
+
+# Allow specific bots known for fast crawling
+User-agent: Googlebot
+Crawl-delay: 0
+Request-rate: 10/1s
