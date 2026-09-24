@@ -9,10 +9,10 @@
   ══════════════════════════════════════════════ -->
   <title>GhostRecon — Advanced OSINT Dork Engine</title>
   <meta name="description" content="GhostRecon — free Google Dorking and OSINT tool for bug bounty hunters and VAPT pros. 400+ ready-made dorks for credential leaks, exposed configs, CVEs, admin panels, Shodan queries, GitHub secrets. No signup, no backend, no tracking.">
-  <meta name="keywords" content="google dorking, google dorking tool, google dorking for bug bounty, how to google dork, google hacking, dorking tool, osint tool, dork engine, google dorks list, shodan dorks, github dorking, censys queries, bug bounty reconnaissance, vapt tool, penetration testing recon, exposed credentials finder, admin panel discovery, github secrets scanner, cve exploit dorks, oauth misconfiguration, attack surface mapping, information gathering tool, passive recon, ghdb alternative, google hacking database, open source intelligence, security research tool, free osint tool, browser-based dorking, no backend osint">
   <meta name="author" content="GhostRecon">
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <meta name="theme-color" content="#8b5cf6">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'">
   <link rel="canonical" href="https://ankesh-prajapati.github.io/ghostrecon/">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>👻</text></svg>">
 
@@ -92,19 +92,8 @@
   }
   </script>
 
-  <!-- ══════════════════════════════════════════════
-       GOOGLE ANALYTICS 4
-  ══════════════════════════════════════════════ -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-ED9BYX2YY0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-ED9BYX2YY0', {
-      page_title: 'GhostRecon — OSINT Dork Engine',
-      send_page_view: true
-    });
-  </script>
+  <!-- No analytics/tracking scripts: the site's own description and FAQ
+       promise "no tracking, no data leaves your browser" — keep it true. -->
 
   <!-- Assets -->
   <link rel="stylesheet" href="fonts.css">
@@ -178,7 +167,7 @@
               <label><i class="fas fa-server"></i> TARGET DOMAIN</label>
               <div class="input-wrap">
                 <span class="input-prefix">site:</span>
-                <input type="text" id="inp-domain" class="has-prefix" placeholder="example.com" autocomplete="off">
+                <input type="text" id="inp-domain" class="has-prefix" placeholder="example.com" autocomplete="off" aria-label="Enter target domain for dorking">
                 <button class="clear-btn" onclick="clearField('inp-domain')" title="Clear"><i class="fas fa-times"></i></button>
               </div>
               <div class="target-meta">
@@ -217,7 +206,7 @@
             <div class="field">
               <label><i class="fas fa-search"></i> KEYWORD / QUERY</label>
               <div class="input-wrap">
-                <input type="text" id="inp-kw" placeholder="Optional search term…" autocomplete="off">
+                <input type="text" id="inp-kw" placeholder="Optional search term…" autocomplete="off" aria-label="Optional search keyword to filter dorks">
                 <button class="clear-btn" onclick="clearField('inp-kw')" title="Clear"><i class="fas fa-times"></i></button>
               </div>
             </div>
@@ -278,13 +267,13 @@
         <div class="cat-section">
         <div class="section-head">
           <div class="section-title"><i class="fas fa-database"></i> <span id="cat-title">CYBER INTEL CATEGORIES</span></div>
-          <input type="text" class="cat-search" id="cat-filter" placeholder="Filter categories…" oninput="filterCats()">
+          <input type="text" class="cat-search" id="cat-filter" placeholder="Filter categories…" oninput="filterCats()" aria-label="Search and filter dork categories">
         </div>
         <!-- GLOBAL DORK SEARCH -->
         <div id="global-search-wrap">
           <div class="input-wrap" style="position:relative;">
             <span style="position:absolute;left:11px;z-index:1;color:var(--acid);font-size:12px;pointer-events:none;"><i class="fas fa-search"></i></span>
-            <input type="text" id="global-search" class="cat-search" style="width:100%;padding-left:32px;border-color:rgba(34,211,238,0.3);" placeholder="⚡ Search ALL dorks across every category…" oninput="globalSearch(this.value)">
+            <input type="text" id="global-search" class="cat-search" style="width:100%;padding-left:32px;border-color:rgba(34,211,238,0.3);" placeholder="⚡ Search ALL dorks across every category…" oninput="globalSearch(this.value)" aria-label="Global search across all dork categories">
             <button class="clear-btn" style="position:absolute;right:8px;" onclick="clearGlobalSearch()" title="Clear search"><i class="fas fa-times"></i></button>
           </div>
           <div id="global-results" class="hidden"></div>
@@ -320,7 +309,7 @@
           <button class="op-chip" onclick="insertOp('()')">( )</button>
         </div>
         <div class="field">
-          <textarea id="custom-inp" placeholder='Example: site:example.com inurl:admin filetype:php intitle:"login"' rows="4"></textarea>
+          <textarea id="custom-inp" placeholder='Example: site:example.com inurl:admin filetype:php intitle:"login"' rows="4" aria-label="Build a custom dork query by combining Google search operators"></textarea>
         </div>
 
         <!-- Engine selector (kept in sync with the main tool page) -->
@@ -415,7 +404,7 @@
     <div class="panel-body faq-grid">
       <div class="faq-item">
         <h3>What is Google dorking?</h3>
-        <p>Google dorking (also called <strong>Google hacking</strong>) is the practice of using advanced search operators — like <code>site:</code>, <code>filetype:</code>, and <code>inurl:</code> — to find information that isn't easily reachable through a normal search. Security researchers use dorks during OSINT and reconnaissance to surface exposed files, login pages, and misconfigured services on the public web.</p>
+        <p>Google dorking (also called <strong>Google hacking</strong>) is the practice of using advanced search operators — like <code>site:</code>, <code>filetype:</code>, and <code>inurl:</code> — to find information that isn't easily reachable through a normal search. Security researchers use dorks during OSINT and reconnaissance to surface exposed files, login pages, and misconfigured services on the public web. <a href="#tool" onclick="document.querySelector('[data-page=\"tool\"]').click(); return false;" class="faq-link">Try GhostRecon's dork library →</a></p>
       </div>
       <div class="faq-item">
         <h3>Is Google dorking illegal?</h3>
@@ -423,7 +412,7 @@
       </div>
       <div class="faq-item">
         <h3>What is GhostRecon?</h3>
-        <p>GhostRecon is a free, browser-based Google Dorking and OSINT engine with 400+ ready-made dork categories (credential leaks, exposed configs, CVE patterns, admin panels, and more), plus a custom dork constructor, Shodan/Censys/GitHub query builders, search history, and favorites — no signup, no backend, no data leaves your browser.</p>
+        <p>GhostRecon is a free, browser-based Google Dorking and OSINT engine with 400+ ready-made dork categories (credential leaks, exposed configs, CVE patterns, admin panels, and more), plus a <a href="#custom" onclick="document.querySelector('[data-page=\"custom\"]').click(); return false;" class="faq-link">custom dork constructor</a>, Shodan/Censys/GitHub query builders, search history, and favorites — no signup, no backend, no data leaves your browser.</p>
       </div>
       <div class="faq-item">
         <h3>What's the difference between Google dorking and OSINT?</h3>
@@ -435,7 +424,7 @@
       </div>
       <div class="faq-item">
         <h3>Can I use these dorks for bug bounty hunting?</h3>
-        <p>Yes — GhostRecon's dorks are built with bug bounty and VAPT recon in mind: attack surface mapping, subdomain discovery, exposed credentials, admin panel discovery, and API reconnaissance are all covered. Always stay within the target's authorized scope.</p>
+        <p>Yes — GhostRecon's dorks are built with bug bounty and VAPT recon in mind: attack surface mapping, subdomain discovery, exposed credentials, admin panel discovery, and API reconnaissance are all covered. Always stay within the target's authorized scope. <a href="#tool" onclick="document.querySelector('[data-page=\"tool\"]').click(); return false;" class="faq-link">Start a recon session →</a></p>
       </div>
     </div>
   </div><!-- /faq-section -->

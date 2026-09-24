@@ -1,50 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <!-- Homepage — highest priority -->
+  <!-- GhostRecon is a single-page app; #fragments are client-side view
+       state, not separately crawlable URLs, so only the canonical page
+       is listed here. -->
   <url>
     <loc>https://ankesh-prajapati.github.io/ghostrecon/</loc>
-    <lastmod>2025-01-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>1.0</priority>
-  </url>
-
-  <!-- OSINT/Dork Engine tab — core feature -->
-  <url>
-    <loc>https://ankesh-prajapati.github.io/ghostrecon/#tool</loc>
-    <lastmod>2025-01-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.95</priority>
-  </url>
-
-  <!-- Constructor tab — custom dorking -->
-  <url>
-    <loc>https://ankesh-prajapati.github.io/ghostrecon/#custom</loc>
-    <lastmod>2025-01-22</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.9</priority>
-  </url>
-
-  <!-- Operators Reference + FAQ — high value for long-tail "what is google dorking" searches -->
-  <url>
-    <loc>https://ankesh-prajapati.github.io/ghostrecon/#ref</loc>
-    <lastmod>2025-01-22</lastmod>
+    <lastmod>2026-09-24</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.85</priority>
-  </url>
-
-  <!-- History tab — user-generated content (crawl, but lower priority) -->
-  <url>
-    <loc>https://ankesh-prajapati.github.io/ghostrecon/#history</loc>
-    <lastmod>2025-01-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>
-
-  <!-- Favorites tab — user-generated content (crawl, lower priority) -->
-  <url>
-    <loc>https://ankesh-prajapati.github.io/ghostrecon/#favs</loc>
-    <lastmod>2025-01-22</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
+    <priority>1.0</priority>
   </url>
 </urlset>
